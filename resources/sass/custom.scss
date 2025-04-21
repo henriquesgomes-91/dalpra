@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'Sofia';
+    src: url('../fonts/SofiaSans-ExtraLight.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, html{
+    font-family: Sofia, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 100% !important;
+    margin: auto !important;
+    overflow: auto !important;
+    font-size: 16px !important;
+    font-weight: 300 !important;
+    background-color: #f8f6f6;
+}
+
+body:not(.layout-fixed) .main-sidebar {
+    height: inherit;
+    min-height: 100%;
+    position: fixed;
+    top: 0;
+}
+
+.sidebar {
+    height: 100% !important;
+    overflow-x: hidden;
+    padding: 0 0.5rem;
+    scrollbar-color: #a9a9a9 transparent;
+    scrollbar-width: none;
+}
+
+[class*=sidebar-dark] .brand-link {
+    border-bottom: 2px solid #e8b505;
+}
+
+[class*=sidebar-dark-] {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+[class*=sidebar-dark-] .nav-sidebar>.nav-item.menu-open>.nav-link,
+[class*=sidebar-dark-] .nav-sidebar>.nav-item:hover>.nav-link,
+[class*=sidebar-dark-] .nav-treeview>.nav-item:hover>.nav-link,
+[class*=sidebar-dark-] .nav-sidebar>.nav-item>.nav-link:focus,
+[class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link:focus,
+[class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active,
+[class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:focus,
+[class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:hover,
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
+.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active
+{
+    font-size: 16px;
+    color: black;
+    background-color: #e8b505 !important;
+}
+
+.button-dalpra {
+    background-color: black;
+    color: white;
+}
+
+.button-dalpra:hover {
+    background-color: #e8b505;
+    color: black;
+}
