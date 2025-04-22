@@ -7,59 +7,52 @@ use Illuminate\Http\Request;
 
 class FornecedorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $fornecedores = Fornecedor::all();
+        return view('fornecedor.index', compact('fornecedores'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('fornecedor.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->merge(['cnpj' => preg_replace('/[^0-9]/', '', $request->cnpj)]);
+
+        $request->validate([
+            'razao_social' => 'required|string|max:100',
+            'cnpj' => 'required|string|max:15',
+        ]);
+
+        Fornecedor::create($request->all());
+        return redirect()->route('fornecedor.index')->with('success', 'Fornecedor criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Fornecedor $fornecedor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Fornecedor $fornecedor)
     {
-        //
+        return view('fornecedor.edit', compact('fornecedor'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Fornecedor $fornecedor)
-    {
-        //
+    { // Remover máscara
+        $request->merge(['cnpj' => preg_replace('/[^0-9]/', '', $request->cnpj)]);
+
+        $request->validate([
+            'razao_social' => 'required|string|max:100',
+            'cnpj' => 'required|string|max:15',
+        ]);
+
+
+        $fornecedor->update($request->all());
+        return redirect()->route('fornecedor.index')->with('success', 'Fornecedor atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Fornecedor $fornecedor)
     {
-        //
+        $fornecedor->delete();
+        return redirect()->route('fornecedor.index')->with('success', 'Fornecedor deletado com sucesso!');
     }
 }

@@ -10,9 +10,12 @@ class Cliente extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public $preventsLazyLoading = true;
-
     protected $table = 'clientes';
 
     protected $fillable = ['id', 'nome', 'email', 'telefone'];
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedidos::class, 'id_cliente');
+    }
 }

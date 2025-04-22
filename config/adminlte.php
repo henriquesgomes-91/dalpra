@@ -312,8 +312,27 @@ return [
 
        ['header' => 'Cadastros'],
         [
+            'text' => 'Caminhão',
+            'url'  => '/caminhao',
+            'icon' => 'fas fa-truck',
+        ],
+        [
             'text' => 'Cliente',
             'url'  => '/clientes',
+            'icon' => 'fas fa-user',
+        ],
+        [
+            'text' => 'Fornecedor',
+            'url'  => '/fornecedor',
+            'icon' => 'fas fa-user',
+        ],        [
+            'text' => 'Fornecedor x Produtos',
+            'url'  => '/produtofornecedor',
+            'icon' => 'fas fa-box',
+        ],
+        [
+            'text' => 'Motorista',
+            'url'  => '/motorista',
             'icon' => 'fas fa-user',
         ],
         [

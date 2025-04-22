@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ProdutoFornecedor extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    public $preventsLazyLoading = true;
+
+    protected $table = 'produto_fornecedor';
+
+    protected $fillable = ['id_fornecedor', 'id_produto', 'valor'];
+
+    public function fornecedor()
+    {
+        return $this->belongsTo(Fornecedor::class, 'id_fornecedor');
+    }
+
+    public function produto()
+    {
+        return $this->belongsTo(Produto::class, 'id_produto');
+    }
+}

@@ -6,18 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Motorista extends Model
+class Caminhao extends Model
 {
     use HasFactory, SoftDeletes;
 
     public $preventsLazyLoading = true;
 
-    protected $table = 'motoristas';
+    protected $table = 'caminhao';
 
-    protected $fillable = ['nome'];
-
-    public function pedidos()
-    {
-        return $this->hasMany(Pedidos::class, 'id_motorista');
-    }
+    protected $fillable = ['id', 'descricao', 'placa'];
 }
