@@ -26,7 +26,7 @@
         <tbody>
         @foreach($produtosXFornecedores as $produtoxfornecedor)
             <tr>
-                <td>{{ $produtoxfornecedor->fornecedor->razao_social }}</td>
+                <td>{{ $produtoxfornecedor->fornecedor ? $produtoxfornecedor->fornecedor->razao_social : 'N/A' }}</td>
                 <td>{{ $produtoxfornecedor->produto->descricao }}</td>
                 <td>{{ 'R$ ' . number_format($produtoxfornecedor->valor, 2, ',', '.') }}</td>
                 <td>

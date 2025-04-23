@@ -9,12 +9,16 @@ body, html{
     font-family: Sofia, "Helvetica Neue", Helvetica, Arial, sans-serif;
     width: 100% !important;
     margin: auto !important;
-    overflow: auto !important;
+    overflow-y: auto;
     font-size: 16px !important;
     font-weight: 300 !important;
     background-color: #f8f6f6;
 }
 
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
 body:not(.layout-fixed) .main-sidebar {
     height: inherit;
     min-height: 100%;
@@ -50,17 +54,48 @@ body:not(.layout-fixed) .main-sidebar {
 .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
 .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active
 {
-    font-size: 16px;
+    font-size: 18px;
     color: black;
     background-color: #e8b505 !important;
 }
 
 .button-dalpra {
-    background-color: black;
+    background-color: #353A40;
     color: white;
 }
 
 .button-dalpra:hover {
     background-color: #e8b505;
     color: black;
+}
+
+.btn {
+    font-weight: 900 !important;
+}
+
+table.dataTable thead th {
+    background-color: #353A40; // Altere para a cor desejada
+    color: white; // Altere para a cor do texto desejada
+}
+
+table th, table td {
+    vertical-align: middle !important;
+}
+
+.hr-dalpra {
+    border: 2px solid #353A40;
+    width: 100%;
+
+}
+
+.move:hover {
+    animation: shake 1s ease-in-out;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
 }

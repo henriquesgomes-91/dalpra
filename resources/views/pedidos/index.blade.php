@@ -30,7 +30,7 @@
         @foreach($pedidos as $pedido)
             <tr>
                 <td>{{ $pedido->clientes ? $pedido->clientes->nome : 'N/A' }}</td>
-                <td>{{ $pedido->fornecedor->razao_social }}</td>
+                <td>{{ $pedido->fornecedor ? $pedido->fornecedor->razao_social : 'N/A'}}</td>
                 <td>{{ $pedido->produtos->descricao }}</td>
                 <td>{{ 'R$ ' . number_format($pedido->valor, 2, ',', '.') }}</td>
                 <td>{{ $pedido->data_entrega ? date('d/m/Y', strtotime($pedido->data_entrega)) : 'N/A' }}</td>

@@ -55,4 +55,10 @@ class FornecedorController extends Controller
         $fornecedor->delete();
         return redirect()->route('fornecedor.index')->with('success', 'Fornecedor deletado com sucesso!');
     }
+
+    public function show($id)
+    {
+        $fornecedor = Fornecedor::findOrFail($id);
+        return view('fornecedor.show', compact('fornecedor'));
+    }
 }
