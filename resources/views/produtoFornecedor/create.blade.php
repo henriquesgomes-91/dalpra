@@ -2,6 +2,12 @@
 @push('css')
     @vite(['resources/sass/custom.scss'])
 @endpush
+@section('title', 'Cadastrar Produto x Fornecedor')
+
+@section('content_header')
+    <h1>Cadastrar Produto x Fornecedor</h1>
+    <hr class="hr-dalpra">
+@endsection
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -18,35 +24,46 @@
         });
     </script>
 @endpush
-@section('title', 'Novo Produto x Fornecedor')
-
-@section('content_header')
-    <h1>Criar Produto x Fornecedor</h1>
-@endsection
-
 @section('content')
-    <form action="{{ route('produtofornecedor.store') }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="id_fornecedor">Fornecedor</label>
-            <select name="id_fornecedor" class="form-control" required>
-                @foreach($fornecedores as $fornecedor)
-                    <option value="{{ $fornecedor->id }}">{{ $fornecedor->razao_social }}</option>
-                @endforeach
-            </select>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <div class="row table-responsive">
+        <div class="col-12">
+            <form action="{{ route('produtofornecedor.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="id_fornecedor">Fornecedor</label>
+                    <select name="id_fornecedor" class="form-control" required>
+                        @foreach($fornecedores as $fornecedor)
+                            <option value="{{ $fornecedor->id }}">{{ $fornecedor->razao_social }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_produto">Produto</label>
+                    <select name="id_produto" class="form-control" required>
+                        @foreach($produtos as $produto)
+                            <option value="{{ $produto->id }}">{{ $produto->descricao }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Valor</label>
+                    <input type="number" name="valor" id="valor" class="form-control" step="0.01" required>
+                </div>
+                <div class="row">
+                    <div class="col-6 text-left">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a href="{{ route('produtofornecedor.index') }}" class="btn btn-secondary mb-3">Voltar</a>
+                    </div>
+                </div>
+
+            </form>
         </div>
-        <div class="form-group">
-            <label for="id_produto">Produto</label>
-            <select name="id_produto" class="form-control" required>
-                @foreach($produtos as $produto)
-                    <option value="{{ $produto->id }}">{{ $produto->descricao }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="valor">Valor</label>
-            <input type="number" name="valor" id="valor" class="form-control" step="0.01" required>
-        </div>
-        <button type="submit" class="btn btn-success">Salvar</button>
-    </form>
+    </div>
 @endsection
+

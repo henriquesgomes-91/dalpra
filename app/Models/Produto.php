@@ -15,7 +15,7 @@ class Produto extends Model
     protected $fillable = ['descricao'];
 
     // Definindo a relação com ProdutoXFornecedor
-    public function produtosFornecedores()
+    public function produtoFornecedor()
     {
         return $this->hasMany(ProdutoFornecedor::class);
     }

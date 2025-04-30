@@ -7,6 +7,7 @@ use App\Http\Controllers\MotoristaController;
 use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ProdutoFornecedorController;
+use App\Http\Controllers\RelatorioController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('fornecedor/{id}/produtos', [ProdutoController::class, 'produtosPorFornecedor']);
     Route::get('produto/{id}', [ProdutoController::class, 'valorPorProduto']);
+
+    Route::get('/relatorios/vendas', [RelatorioController::class, 'index'])->name('relatorio.vendas');
+    Route::post('/relatorios/vendas', [RelatorioController::class, 'generate'])->name('relatorio.vendas.generate');
+    Route::get('/relatorios/vendas/exportar', [RelatorioController::class, 'exportar'])->name('relatorio.vendas.exportar');
 });

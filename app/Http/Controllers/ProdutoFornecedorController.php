@@ -17,8 +17,8 @@ class ProdutoFornecedorController extends Controller
 
     public function create()
     {
-        $fornecedores = Fornecedor::all();
-        $produtos = Produto::all();
+        $fornecedores = Fornecedor::get();
+        $produtos = Produto::get();
         return view('produtoFornecedor.create', compact('fornecedores', 'produtos'));
     }
 
@@ -35,11 +35,12 @@ class ProdutoFornecedorController extends Controller
         return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor criado com sucesso!');
     }
 
-    public function edit(ProdutoFornecedor $produtofornecedor)
+    public function edit($id)
     {
-        $fornecedores = Fornecedor::all();
-        $produtos = Produto::all();
-        return view('produtoFornecedor.edit', compact('produtofornecedor', 'fornecedores', 'produtos'));
+        $produtoxfornecedor = ProdutoFornecedor::findOrFail($id);
+        $fornecedores = Fornecedor::get();
+        $produtos = Produto::get();
+        return view('produtoFornecedor.edit', compact('produtoxfornecedor', 'fornecedores', 'produtos'));
     }
 
     public function update(Request $request, ProdutoFornecedor $produtofornecedor)
@@ -55,9 +56,17 @@ class ProdutoFornecedorController extends Controller
         return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor atualizado com sucesso!');
     }
 
-    public function destroy(ProdutoFornecedor $produtofornecedor)
+    public function destroy($id)
     {
+        $produtofornecedor = ProdutoFornecedor::findOrFail($id);
         $produtofornecedor->delete();
         return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor deletado com sucesso!');
+    }
+
+
+    public function show($id)
+    {
+        $produtoxfornecedor = ProdutoFornecedor::findOrFail($id);
+        return view('produtoFornecedor.show', compact('produtoxfornecedor'));
     }
 }

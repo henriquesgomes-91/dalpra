@@ -30,11 +30,12 @@ class CaminhaoController extends Controller
 
         Caminhao::create($arDadosCaminhao);
 
-        return redirect()->route('caminhao.index')->with('success', 'Caminhao criado com sucesso!');
+        return redirect()->route('caminhao.index')->with('success', 'Caminhão criado com sucesso!');
     }
 
-    public function edit(Caminhao $caminhao)
+    public function edit($id)
     {
+        $caminhao = Caminhao::findOrFail($id);
         return view('caminhao.edit', compact('caminhao'));
     }
 
@@ -47,12 +48,20 @@ class CaminhaoController extends Controller
 
         $caminhao->update($request->all());
 
-        return redirect()->route('caminhao.index')->with('success', 'Caminhao atualizado com sucesso!');
+        return redirect()->route('caminhao.index')->with('success', 'Caminhão atualizado com sucesso!');
     }
 
-    public function destroy(Caminhao $caminhao)
+    public function destroy($id)
     {
+        $caminhao = Caminhao::findOrFail($id);
         $caminhao->delete();
-        return redirect()->route('caminhao.index')->with('success', 'Caminhao removido!');
+        return redirect()->route('caminhao.index')->with('success', 'Caminhão removido!');
+    }
+
+
+    public function show($id)
+    {
+        $caminhao = Caminhao::findOrFail($id);
+        return view('caminhao.show', compact('caminhao'));
     }
 }

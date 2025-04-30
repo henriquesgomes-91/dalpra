@@ -2,20 +2,37 @@
 @push('css')
     @vite(['resources/sass/custom.scss'])
 @endpush
-@section('title', 'Editar Produto')
+@section('title', 'Editar Produto - ' . $produto->descricao)
 
 @section('content_header')
-    <h1>Editar Produto</h1>
+    <h1>Editar Produto - {{$produto->descricao}}</h1>
+    <hr class="hr-dalpra">
+@endsection
+@section('content')
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <div class="row table-responsive">
+        <div class="col-12">
+            <form action="{{ route('produtos.update', $produto) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" name="descricao" class="form-control" value="{{ $produto->descricao }}" required>
+                </div>
+                <div class="row">
+                    <div class="col-6 text-left">
+                        <button type="submit" class="btn btn-success">Atualizar</button>
+                    </div>
+                    <div class="col-6 text-right">
+                        <a href="{{ route('produtos.index') }}" class="btn btn-secondary mb-3">Voltar</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
 @endsection
 
-@section('content')
-    <form action="{{ route('produtos.update', $produto) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label for="descricao">Descrição</label>
-            <input type="text" name="descricao" class="form-control" value="{{ $produto->descricao }}" required>
-        </div>
-        <button type="submit" class="btn btn-success">Atualizar</button>
-    </form>
-@endsection

@@ -66,4 +66,9 @@ class ProdutoController extends Controller
         $produto = ProdutoFornecedor::where('id_produto', $id)->first();
         return response()->json(['valor' => $produto->valor]);
     }
+
+    public function show(Produto $produto)
+    {
+        return view('produtos.show', compact('produto'));
+    }
 }

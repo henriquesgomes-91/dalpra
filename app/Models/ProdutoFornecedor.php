@@ -10,8 +10,6 @@ class ProdutoFornecedor extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public $preventsLazyLoading = true;
-
     protected $table = 'produto_fornecedor';
 
     protected $fillable = ['id_fornecedor', 'id_produto', 'valor'];
