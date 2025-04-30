@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fornecedor;
 use App\Models\Motorista;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ class MotoristaController extends Controller
 {
     public function index()
     {
-        $motoristas = Motorista::all();
+        $motoristas = Motorista::get();
         return view('motorista.index', compact('motoristas'));
     }
 
@@ -22,13 +23,15 @@ class MotoristaController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:100',
+            'comissao' => 'required|numeric',
         ]);
         Motorista::create($request->all());
         return redirect()->route('motorista.index')->with('success', 'Motorista criado com sucesso!');
     }
 
-    public function edit(Motorista $motorista)
+    public function edit($id)
     {
+        $motorista = Motorista::findOrFail($id);
         return view('motorista.edit', compact('motorista'));
     }
 
@@ -36,14 +39,22 @@ class MotoristaController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:100',
+            'comissao' => 'required|numeric',
         ]);
         $motorista->update($request->all());
         return redirect()->route('motorista.index')->with('success', 'Motorista atualizado com sucesso!');
     }
 
-    public function destroy(Motorista $motorista)
+    public function destroy($id)
     {
+        $motorista = Motorista::findOrFail($id);
         $motorista->delete();
         return redirect()->route('motorista.index')->with('success', 'Motorista deletado com sucesso!');
+    }
+
+    public function show($id)
+    {
+        $motorista = Motorista::findOrFail($id);
+        return view('motorista.show', compact('motorista'));
     }
 }

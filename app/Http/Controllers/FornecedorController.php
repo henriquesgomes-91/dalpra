@@ -9,7 +9,7 @@ class FornecedorController extends Controller
 {
     public function index()
     {
-        $fornecedores = Fornecedor::all();
+        $fornecedores = Fornecedor::get();
         return view('fornecedor.index', compact('fornecedores'));
     }
 
@@ -31,8 +31,9 @@ class FornecedorController extends Controller
         return redirect()->route('fornecedor.index')->with('success', 'Fornecedor criado com sucesso!');
     }
 
-    public function edit(Fornecedor $fornecedor)
+    public function edit($id)
     {
+        $fornecedor = Fornecedor::findOrFail($id);
         return view('fornecedor.edit', compact('fornecedor'));
     }
 
@@ -50,8 +51,9 @@ class FornecedorController extends Controller
         return redirect()->route('fornecedor.index')->with('success', 'Fornecedor atualizado com sucesso!');
     }
 
-    public function destroy(Fornecedor $fornecedor)
+    public function destroy($id)
     {
+        $fornecedor = Fornecedor::findOrFail($id);
         $fornecedor->delete();
         return redirect()->route('fornecedor.index')->with('success', 'Fornecedor deletado com sucesso!');
     }

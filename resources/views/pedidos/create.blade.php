@@ -3,7 +3,7 @@
     @vite(['resources/sass/custom.scss'])
 @endpush
 @push('js')
-    <script src="[https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>](https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#id_fornecedor').change(function() {
@@ -106,6 +106,7 @@
         <div class="form-group">
             <label for="id_motorista">Motorista</label>
             <select name="id_motorista" id="id_motorista" class="form-control" required>
+                <option value="">Selecione</option>
                 @foreach($motoristas as $motorista)
                     <option value="{{ $motorista->id }}">{{ $motorista->nome }}</option>
                 @endforeach
@@ -114,8 +115,9 @@
         <div class="form-group">
             <label for="id_caminhao">Caminhão</label>
             <select name="id_caminhao" id="id_caminhao" class="form-control" required>
+                <option value="">Selecione</option>
                 @foreach($caminhoes as $caminhao)
-                    <option value="{{ $caminhao->id }}">{{ $caminhao->modelo }}</option>
+                    <option value="{{ $caminhao->id }}">{{ $caminhao->descricao }}</option>
                 @endforeach
             </select>
         </div>

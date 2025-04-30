@@ -35,8 +35,9 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('success', 'Cliente criado com sucesso!');
     }
 
-    public function edit(Cliente $cliente)
+    public function edit($id)
     {
+        $cliente = Cliente::findOrFail($id);
         return view('clientes.edit', compact('cliente'));
     }
 
@@ -53,8 +54,9 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
+        $cliente = Cliente::findOrFail($id);
         $cliente->delete();
         return redirect()->route('clientes.index')->with('success', 'Cliente removido!');
     }

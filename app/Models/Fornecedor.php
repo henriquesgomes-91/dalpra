@@ -18,7 +18,6 @@ class Fornecedor extends Model
 
     protected $fillable = ['razao_social', 'cnpj'];
 
-    // Definindo a relação com ProdutoXFornecedor
     public function produtoFornecedor()
     {
         return $this->hasMany(ProdutoFornecedor::class, 'id_fornecedor');

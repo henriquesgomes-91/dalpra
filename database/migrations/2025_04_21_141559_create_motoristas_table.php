@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('motoristas', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 100);
+            $table->double('comissao', 5,2);
             $table->timestamps();
             $table->softDeletes();
         });

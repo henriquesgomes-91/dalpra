@@ -14,7 +14,7 @@ class Motorista extends Model
 
     protected $table = 'motoristas';
 
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'comissao'];
 
     public function pedidos()
     {

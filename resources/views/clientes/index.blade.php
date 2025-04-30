@@ -52,17 +52,17 @@
                         <td class="col-3">{{ $cliente->email }}</td>
                         <td class="col-2">{{ $cliente->telefone }}</td>
                         <td class="col-3 text-center">
-                            <a href="{{ route('clientes.show', $cliente) }}" class="btn btn-outline-dark move">
-                                <i class="fas fa-eye"></i> Visualizar
+                            <a title="Visualizar"  href="{{ route('clientes.show', $cliente) }}" class="btn btn-outline-dark move">
+                                <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-primary move">
-                                <i class="fas fa-pencil-alt"></i> Editar
+                            <a title="Editar" href="{{ route('clientes.edit', $cliente) }}" class="btn btn-primary move">
+                                <i class="fas fa-pencil-alt"></i>
                             </a>
                             <form action="{{ route('clientes.destroy', $cliente) }}" method="POST" style="display:inline-block">
                                 @csrf @method('DELETE')
-                                <button class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
+                                <button title="Excluir"  class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
                                     <i class="fas fa-trash"></i>
-                                    Excluir
+
                                 </button>
                             </form>
                         </td>
