@@ -24,7 +24,8 @@ class ProdutoFornecedorSeeder extends Seeder
                 $produtosFornecedores[] = [
                     'id_produto' => $produtoId,
                     'id_fornecedor' => $fornecedorId,
-                    'valor' => rand(1, 1000),
+                    'preco_venda' => rand(1, 1000),
+                    'custo' => rand(1, 1000),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

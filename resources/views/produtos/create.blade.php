@@ -21,6 +21,15 @@
                     <label for="descricao">Descrição</label>
                     <input type="text" name="descricao" class="form-control" required>
                 </div>
+                <div class="form-group">
+                    <label for="unidade_medida">Unidade de Medida</label>
+                    <select name="unidade_medida" id="unidade_medida" class="form-control" required>
+                        <option value="UN">UN</option>
+                        <option value="KG">KG</option>
+                        <option value="MT">MT</option>
+                        <option value="MT3">MT³</option>
+                    </select>
+                </div>
                 <div class="row">
                     <div class="col-6 text-left">
                         <button type="submit" class="btn btn-success">Salvar</button>

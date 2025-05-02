@@ -110,7 +110,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="valor">Valor</label>
+                    <label for="valor">Preço de Venda</label>
                     <input type="number" name="valor" id="valor" class="form-control" value="{{$pedido->valor}}" required step="0.01">
                 </div>
                 <div class="form-group">

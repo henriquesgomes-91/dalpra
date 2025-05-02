@@ -18,7 +18,8 @@
                 },
                 columnDefs: [
                     { orderable: false, targets: -1 }
-                ]
+                ],
+                order : [[ 0, "desc" ]]
             });
         });
     </script>
@@ -39,7 +40,8 @@
             <table id="tabela_pedidos" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th class="col-3">Cliente</th>
+                    <th class="col-1">ID</th>
+                    <th class="col-2">Cliente</th>
                     <th class="col-3">Fornecedor</th>
                     <th class="col-2">Produto</th>
                     <th class="col-1">Valor</th>
@@ -50,7 +52,8 @@
                 <tbody>
                 @foreach($pedidos as $pedido)
                     <tr>
-                        <td class="col-3">{{ $pedido->clientes ? $pedido->clientes->nome : 'N/A' }}</td>
+                        <td class="col-1">{{ $pedido->id }}</td>
+                        <td class="col-2">{{ $pedido->clientes ? $pedido->clientes->nome : 'N/A' }}</td>
                         <td class="col-3">{{ $pedido->fornecedor ? $pedido->fornecedor->razao_social : 'N/A' }}</td>
                         <td class="col-2">{{ $pedido->produtos ? $pedido->produtos->descricao : 'N/A' }}</td>
                         <td class="col-1">{{ 'R$ ' . number_format($pedido->valor, 2, ',', '.') }}</td>

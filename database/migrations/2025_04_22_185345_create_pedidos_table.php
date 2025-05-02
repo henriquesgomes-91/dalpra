@@ -23,10 +23,10 @@ return new class extends Migration
             $table->foreignId('id_fornecedor')->constrained('fornecedor');
             $table->foreignId('id_produto')->constrained('produtos');
             $table->double('valor', 9, 2);
-            $table->foreignId('id_motorista')->constrained('motoristas')->nullable();
-            $table->foreignId('id_caminhao')->constrained('caminhao')->nullable();
+            $table->foreignId('id_motorista')->constrained('motoristas');
+            $table->foreignId('id_caminhao')->constrained('caminhao');
             $table->boolean('pago')->default(false);
-            $table->date('data_entrega')->nullable();
+            $table->date('data_entrega');
             $table->timestamps();
             $table->softDeletes();
         });

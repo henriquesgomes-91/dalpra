@@ -33,27 +33,31 @@
             <table id="tabela_relatorio_vendas" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th class="col-3">ID</th>
+                    <th class="col-3">Cliente</th>
+                    <th class="col-2">Produto</th>
+                    <th class="col-1">Quantidade</th>
                     <th class="col-2">Fornecedor</th>
                     <th class="col-2">Motorista</th>
-                    <th class="col-2">Valor</th>
-                    <th class="col-2">Data de Entrega</th>
+                    <th class="col-1">Data de Entrega</th>
+                    <th class="col-1">Valor</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($pedidos as $pedido)
                     <tr>
-                        <td class="col-3">{{ str_pad($pedido->id, 6, '0', STR_PAD_LEFT) }}</td>
+                        <td class="col-3">{{$pedido->clientes ? $pedido->clientes->nome : 'N/A'}}</td>
+                        <td class="col-2">{{ $pedido?->produtos?->descricao ?? 'N/A' }}</td>
+                        <td class="col-1">{{ str_pad($pedido->id, 6, '0', STR_PAD_LEFT) }}</td>
                         <td class="col-2">{{$pedido->fornecedor ? $pedido->fornecedor->razao_social : 'N/A'}}</td>
                         <td class="col-2">{{ $pedido->motoristas ? $pedido->motoristas->nome : 'N/A' }}</td>
-                        <td class="col-2">{{$pedido->data_entrega ? date('d/m/Y', strtotime($pedido->data_entrega)) : 'N/A'}}</td>
-                        <td class="col-2">{{'R$ '.number_format($pedido->valor, 2, ',', '.')}}</td>
+                        <td class="col-1">{{$pedido->data_entrega ? date('d/m/Y', strtotime($pedido->data_entrega)) : 'N/A'}}</td>
+                        <td class="col-1">{{'R$ '.number_format($pedido->valor, 2, ',', '.')}}</td>
                     </tr>
                 @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td class="col-9" colspan="4"><b>Valor Total </b></td>
+                        <td class="col-9" colspan="6"><b>Valor Total </b></td>
                         <td class="col-3"><b>{{ 'R$ '.number_format($pedidos->sum('valor'), 2, ',', '.') }}</b></td>
                     </tr>
                 </tfoot>

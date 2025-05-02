@@ -55,8 +55,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="valor">Valor</label>
-                    <input type="number" name="valor" class="form-control" value="{{ $produtoxfornecedor->valor }}" step="0.01" required>
+                    <label for="custo">Custo</label>
+                    <input type="number" name="custo" id="custo" class="form-control" value="{{ $produtoxfornecedor->custo }}" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Preço de Venda</label>
+                    <input type="number" name="preco_venda" id="preco_venda" class="form-control" value="{{ $produtoxfornecedor->preco_venda }}" step="0.01" required>
                 </div>
                 <div class="row">
                     <div class="col-6 text-left">

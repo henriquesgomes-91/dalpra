@@ -18,8 +18,27 @@
                 <input type="date" name="data_fim" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="pago">Pago?</label>
-                <input type="checkbox" name="pago" value="1" id="pago">
+                <input type="radio" name="pago" value="1" id="naoPago"><label for="naoPago">&nbsp;Não Pago</label>
+                &nbsp;&nbsp;<input type="radio" name="pago" value="0" id="pago"><label for="pago">&nbsp;Pago</label>
+                &nbsp;&nbsp;<input type="radio" name="pago" value="2" id="todos"><label for="todos">&nbsp;Todos</label>
+            </div>
+            <div class="form-group">
+                <label for="fornecedor_id">Caminhão:</label>
+                <select name="fornecedor_id" class="form-control">
+                    <option value="">Selecione</option>
+                    @foreach($fornecedores as $fornecedor)
+                        <option value="{{ $fornecedor->id }}">{{ $fornecedor->razao_social }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="fornecedor_id">Produto:</label>
+                <select name="fornecedor_id" class="form-control">
+                    <option value="">Selecione</option>
+                    @foreach($fornecedores as $fornecedor)
+                        <option value="{{ $fornecedor->id }}">{{ $fornecedor->razao_social }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="fornecedor_id">Fornecedor:</label>

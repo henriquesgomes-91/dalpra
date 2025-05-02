@@ -32,7 +32,7 @@ class RelatorioController extends Controller
         }
 
         if ($request->filled('fornecedor_id')) {
-            $pedidos->where('fornecedor_id', $request->fornecedor_id);
+            $pedidos->where('id_fornecedor', $request->fornecedor_id);
         }
 
         if ($request->filled('pago')) {
@@ -40,7 +40,7 @@ class RelatorioController extends Controller
         }
 
         if ($request->filled('motorista_id')) {
-            $pedidos->where('motorista_id', $request->motorista_id);
+            $pedidos->where('id_motorista', $request->motorista_id);
         }
         $arFilter = $request->only(['data_inicio', 'data_fim', 'fornecedor_id', 'motorista_id', 'pago']);
         $arFilter['data_geracao'] = date('d/m/Y H:i:s');

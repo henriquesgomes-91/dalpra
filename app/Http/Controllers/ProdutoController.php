@@ -64,7 +64,7 @@ class ProdutoController extends Controller
     public function valorPorProduto($id)
     {
         $produto = ProdutoFornecedor::where('id_produto', $id)->first();
-        return response()->json(['valor' => $produto->valor]);
+        return response()->json(['preco_venda' => $produto->valor]);
     }
 
     public function show(Produto $produto)
