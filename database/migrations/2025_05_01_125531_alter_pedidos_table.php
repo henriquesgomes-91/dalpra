@@ -9,7 +9,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pedidos', function (Blueprint $table) {
-            // Remover as colunas
+            $table->dropForeign(['id_motorista']);
+            $table->dropForeign(['id_caminhao']);
+            $table->dropForeign(['id_fornecedor']);
+            $table->dropForeign(['id_produto']);
             $table->dropColumn(['valor', 'data_entrega', 'pago', 'id_motorista', 'id_caminhao', 'id_fornecedor', 'id_produto']);
         });
     }
