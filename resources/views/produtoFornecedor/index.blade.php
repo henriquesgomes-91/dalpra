@@ -13,8 +13,30 @@
     <script>
         $(document).ready(function() {
             $('#tabela_produtofornecedor').DataTable({
-                'language': {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese.json'
+                language: {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "zeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "emptyTable": "Nenhum registro encontrado.",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
                 },
                 columnDefs: [
                     { orderable: false, targets: -1 }
@@ -39,18 +61,20 @@
             <table id="tabela_produtofornecedor" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th class="col-4">Fornecedor</th>
+                    <th class="col-3">Fornecedor</th>
                     <th class="col-3">Produto</th>
-                    <th class="col-3">Valor</th>
+                    <th class="col-2">Custo</th>
+                    <th class="col-2">Preço de Venda</th>
                     <th class="col-2">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($produtosXFornecedores as $produtoxfornecedor)
                     <tr>
-                        <td class="col-4">{{ $produtoxfornecedor->fornecedor ? $produtoxfornecedor->fornecedor->razao_social : 'N/A' }}</td>
+                        <td class="col-3">{{ $produtoxfornecedor->fornecedor ? $produtoxfornecedor->fornecedor->razao_social : 'N/A' }}</td>
                         <td class="col-3">{{ $produtoxfornecedor->produto ? $produtoxfornecedor->produto->descricao : 'N/A' }}</td>
-                        <td class="col-3">{{ 'R$ ' . number_format($produtoxfornecedor->valor, 2, ',', '.') }}</td>
+                        <td class="col-2">{{ 'R$ ' . number_format($produtoxfornecedor->custo, 2, ',', '.') }}</td>
+                        <td class="col-2">{{ 'R$ ' . number_format($produtoxfornecedor->preco_venda ?? 0, 2, ',', '.') }}</td>
                         <td class="col-2 text-center">
                             <a title="Visualizar" href="{{ route('produtofornecedor.show', $produtoxfornecedor) }}" class="btn btn-outline-dark move">
                                 <i class="fas fa-eye"></i>

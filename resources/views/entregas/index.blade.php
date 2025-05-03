@@ -2,7 +2,7 @@
 @push('css')
     @vite(['resources/sass/custom.scss'])
 @endpush
-@section('title', 'Fornecedores')
+@section('title', 'Entregas')
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
 @endpush
@@ -12,7 +12,7 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#tabela_fornecedores').DataTable({
+            $('#tabela_entregas').DataTable({
                 language: {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -46,9 +46,9 @@
     </script>
 @endpush
 @section('content_header')
-    <h1>Cadastro de Fornecedores</h1>
+    <h1>Cadastro de Entregas</h1>
     <hr class="hr-dalpra">
-    <a href="{{ route('fornecedor.create') }}" class="btn button-dalpra mb-3"><b>Novo Fornecedor</b></a>
+    <a href="{{ route('entregas.create') }}" class="btn button-dalpra mb-3"><b>Nova Entrega</b></a>
 @endsection
 
 @section('content')
@@ -58,29 +58,39 @@
 
     <div class="row table-responsive">
         <div class="col-12">
-            <table id="tabela_fornecedores" class="table table-bordered table-hover">
+            <table id="tabela_entregas" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th class="col-5">Razão Social</th>
-                    <th class="col-5">CNPJ</th>
+                    <th class="col-2">Motorista</th>
+                    <th class="col-2">Caminhão</th>
+                    <th class="col-2">Fornecedor</th>
+                    <th class="col-1">Produto</th>
+                    <th class="col-1">Quantidade</th>
+                    <th class="col-1">Pago?</th>
+                    <th class="col-1">Data</th>
                     <th class="col-2">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($fornecedores as $fornecedor)
+                @foreach($entregas as $entrega)
                     <tr>
-                        <td class="col-5">{{ $fornecedor->razao_social }}</td>
-                        <td class="col-5">{{ substr($fornecedor->cnpj, 0, 2) . '.' . substr($fornecedor->cnpj, 2, 3) . '.' . substr($fornecedor->cnpj, 5, 3) . '/' . substr($fornecedor->cnpj, 8, 4) . '-' . substr($fornecedor->cnpj, 12, 2) }}</td>
+                        <td class="col-2">{{ $entrega->entregas?->motoristas->nome ?? 'N/A' }}</td>
+                        <td class="col-2">{{ $entrega->entregas?->caminhao->descricao ?? 'N/A' }} / {{ $entrega->entregas?->caminhao->placa ?? 'N/A' }}</td>
+                        <td class="col-2">{{ $entrega->fornecedor->razao_social }}</td>
+                        <td class="col-1">{{ $entrega->produtos->descricao }}</td>
+                        <td class="col-1">{{ $entrega->quantidade }}</td>
+                        <td class="col-1">{{ $entrega->entregas->pago ? 'Sim' : 'Nao' }}</td>
+                        <td class="col-1">{{ $entrega->entregas->data_entrega ? date('d/m/Y', strtotime($entrega->entregas->data_entrega)) : 'N/A' }}</td>
                         <td class="col-2 text-center">
-                            <a title="Visualizar" href="{{ route('fornecedor.show', $fornecedor) }}" class="btn btn-outline-dark move">
+                            <a title="Visualizar"  href="{{ route('entregas.show', $entrega->entregas->id) }}" class="btn btn-outline-dark move">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a title="Editar" href="{{ route('fornecedor.edit', $fornecedor) }}" class="btn btn-primary move">
+                            <a title="Editar" href="{{ route('entregas.edit', $entrega->entregas->id) }}" class="btn btn-primary move">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <form action="{{ route('fornecedor.destroy', $fornecedor) }}" method="POST" style="display:inline-block">
+                            <form action="{{ route('entregas.destroy', $entrega->entregas->id) }}" method="POST" style="display:inline-block">
                                 @csrf @method('DELETE')
-                                <button title="Excluir" class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
+                                <button title="Excluir"  class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
                                     <i class="fas fa-trash"></i>
 
                                 </button>
@@ -93,3 +103,4 @@
         </div>
     </div>
 @endsection
+

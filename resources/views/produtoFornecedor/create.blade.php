@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script>
         $(document).ready(function(){
-            $('#valor').maskMoney({
+            $('#preco_venda', '#custo').maskMoney({
                 prefix: 'R$ ',
                 allowNegative: false,
                 thousands: '.',
@@ -50,8 +50,12 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="valor">Valor</label>
-                    <input type="number" name="valor" id="valor" class="form-control" step="0.01" required>
+                    <label for="custo">Custo</label>
+                    <input type="number" name="custo" id="custo" class="form-control" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="preco_venda">Preço de Venda</label>
+                    <input type="number" name="preco_venda" id="preco_venda" class="form-control" step="0.01" required>
                 </div>
                 <div class="row">
                     <div class="col-6 text-left">

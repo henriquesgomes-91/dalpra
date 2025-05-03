@@ -346,10 +346,16 @@ return [
             'url'  => '/pedidos',
             'icon' => 'fas fa-shopping-cart',
         ],
+        ['header' => 'Entregas'],
+        [
+            'text' => 'Entregas',
+            'url'  => '/entregas',
+            'icon' => 'fas fa-truck ',
+        ],
         ['header' => 'Relatórios'],
         [
-            'text' => 'Vendas',
-            'url'  => '/relatorios/vendas',
+            'text' => 'Entregas',
+            'url'  => '/relatorios/entregas',
             'icon' => 'fas fa-chart-line',
         ],
     ],

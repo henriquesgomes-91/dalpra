@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CaminhaoController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EntregaController;
 use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\MotoristaController;
 use App\Http\Controllers\PedidosController;
@@ -39,11 +40,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('produtos', ProdutoController::class);
     Route::resource('produtofornecedor', ProdutoFornecedorController::class);
     Route::resource('pedidos', PedidosController::class);
+    Route::resource('entregas', EntregaController::class);
 
     Route::get('fornecedor/{id}/produtos', [ProdutoController::class, 'produtosPorFornecedor']);
-    Route::get('produto/{id}', [ProdutoController::class, 'valorPorProduto']);
+    Route::get('produto/{idFornecedor}/{idProduto}/preco', [ProdutoController::class, 'valorPorProduto']);
+    Route::get('/pedido/{id}/itens', [EntregaController::class, 'getItens']);
 
-    Route::get('/relatorios/vendas', [RelatorioController::class, 'index'])->name('relatorio.vendas');
-    Route::post('/relatorios/vendas', [RelatorioController::class, 'generate'])->name('relatorio.vendas.generate');
-    Route::get('/relatorios/vendas/exportar', [RelatorioController::class, 'exportar'])->name('relatorio.vendas.exportar');
+    Route::get('/relatorios/entregas', [RelatorioController::class, 'index'])->name('relatorio.entregas');
+    Route::post('/relatorios/entregas', [RelatorioController::class, 'generate'])->name('relatorio.entregas.generate');
+    Route::get('/relatorios/entregas/exportar', [RelatorioController::class, 'exportar'])->name('relatorio.entregas.exportar');
 });

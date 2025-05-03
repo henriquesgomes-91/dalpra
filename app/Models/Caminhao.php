@@ -15,4 +15,9 @@ class Caminhao extends Model
     protected $table = 'caminhao';
 
     protected $fillable = ['id', 'descricao', 'placa'];
+
+    public function entregas()
+    {
+        return $this->hasMany(Pedidos::class, 'id_caminhao');
+    }
 }

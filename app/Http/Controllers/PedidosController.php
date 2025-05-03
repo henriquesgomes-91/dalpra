@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Caminhao;
 use App\Models\Cliente;
 use App\Models\Fornecedor;
+use App\Models\ItemPedido;
 use App\Models\Motorista;
 use App\Models\Pedidos;
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PedidosController extends Controller
 {
@@ -22,14 +24,12 @@ class PedidosController extends Controller
     {
         $clientes = Cliente::get();
         $fornecedores = Fornecedor::get();
-        $motoristas = Motorista::get();
-        $caminhoes = Caminhao::get();
-        return view('pedidos.create', compact('clientes', 'fornecedores', 'motoristas', 'caminhoes'));
+        return view('pedidos.create', compact('clientes', 'fornecedores'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $arDados = $request->validate([
             'id_cliente' => 'nullable|exists:clientes,id',
             'logradouro' => 'required|string|max:255',
             'numero' => 'required|string|max:10',
@@ -37,17 +37,37 @@ class PedidosController extends Controller
             'bairro' => 'required|string|max:100',
             'cidade' => 'required|string|max:100',
             'estado' => 'required|string|max:2',
-            'id_fornecedor' => 'required|exists:fornecedor,id',
-            'id_produto' => 'required|exists:produtos,id',
-            'valor' => 'required|numeric',
-            'id_motorista' => 'nullable|exists:motoristas,id',
-            'id_caminhao' => 'nullable|exists:caminhao,id',
-            'pago' => 'boolean',
-            'data_entrega' => 'nullable|date',
+            'quantidades' => '',
+            'fornecedores' => '',
+            'produtos' => '',
+            'valores' => ''
         ]);
 
         try{
-            Pedidos::create($request->all());
+            $arItens = array_merge(['quantidades' => $arDados['quantidades']],['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
+            DB::transaction(function () use ($arDados, $arItens) {
+                unset($arDados['fornecedores']);
+                unset($arDados['produtos']);
+                unset($arDados['quantidades']);
+                unset($arDados['valores']);
+                $objPedido = Pedidos::create($arDados);
+
+                DB::commit();
+                $intTotalPedido = 0;
+                foreach ($arItens['fornecedores'] as $key => $value) {
+                    $arDadosInsertItem['id_pedido'] = $objPedido->id;
+                    $arDadosInsertItem['id_fornecedor'] = $value;
+                    $arDadosInsertItem['id_produto'] = $arItens['produtos'][$key];
+                    $arDadosInsertItem['valor'] = $arItens['valores'][$key];
+                    $arDadosInsertItem['quantidade'] = $arItens['quantidades'][$key] ?? 0;
+                    $intTotalPedido+= $arItens['valores'][$key];
+                    ItemPedido::create($arDadosInsertItem);
+                }
+                $objPedido->update(['valor' => $intTotalPedido]);
+                DB::commit();
+            });
+
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -58,33 +78,54 @@ class PedidosController extends Controller
     {
         $clientes = Cliente::get();
         $fornecedores = Fornecedor::get();
-        $motoristas = Motorista::get();
-        $produtos = Produto::get();
-        $caminhoes = Caminhao::get();
-        return view('pedidos.edit', compact('pedido', 'clientes', 'fornecedores', 'motoristas', 'caminhoes', 'produtos'));
+        return view('pedidos.edit', compact('pedido', 'clientes', 'fornecedores'));
     }
 
     public function update(Request $request, Pedidos $pedido)
     {
-        try{
-            $request->validate([
-                'id_cliente' => 'nullable|exists:clientes,id',
-                'logradouro' => 'required|string|max:255',
-                'numero' => 'required|string|max:10',
-                'complemento' => 'nullable|string|max:100',
-                'bairro' => 'required|string|max:100',
-                'cidade' => 'required|string|max:100',
-                'estado' => 'required|string|max:2',
-                'id_fornecedor' => 'required|exists:fornecedor,id',
-                'id_produto' => 'required|exists:produtos,id',
-                'valor' => 'required|numeric',
-                'id_motorista' => 'nullable|exists:motoristas,id',
-                'id_caminhao' => 'nullable|exists:caminhao,id',
-                'pago' => 'boolean',
-                'data_entrega' => 'nullable|date',
-            ]);
+        $arDados = $request->validate([
+            'id_cliente' => 'nullable|exists:clientes,id',
+            'logradouro' => 'required|string|max:255',
+            'numero' => 'required|string|max:10',
+            'complemento' => 'nullable|string|max:100',
+            'bairro' => 'required|string|max:100',
+            'cidade' => 'required|string|max:100',
+            'estado' => 'required|string|max:2',
+            'quantidades' => '',
+            'fornecedores' => '',
+            'produtos' => '',
+            'valores' => ''
+        ]);
 
-            $pedido->update($request->all());
+        try{
+            $arItens = array_merge(['quantidades' => $arDados['quantidades']],['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
+            DB::transaction(function () use ($arDados, $arItens, $pedido) {
+                unset($arDados['fornecedores']);
+                unset($arDados['produtos']);
+                unset($arDados['quantidades']);
+                unset($arDados['valores']);
+                $pedido->update($arDados);
+
+                $pedido->itemPedido->each(function ($item) {
+                    $item->delete();
+                });
+
+                DB::commit();
+                $intTotalPedido = 0;
+                foreach ($arItens['fornecedores'] as $key => $value) {
+                    $arDadosInsertItem['id_pedido'] = $pedido->id;
+                    $arDadosInsertItem['id_fornecedor'] = $value;
+                    $arDadosInsertItem['id_produto'] = $arItens['produtos'][$key];
+                    $arDadosInsertItem['quantidade'] = $arItens['quantidades'][$key] ?? 0;
+                    $arDadosInsertItem['valor'] = $arItens['valores'][$key];
+                    $intTotalPedido+= $arItens['valores'][$key];
+                    ItemPedido::create($arDadosInsertItem);
+                }
+                $pedido->update(['valor' => $intTotalPedido]);
+                DB::commit();
+            });
+
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }

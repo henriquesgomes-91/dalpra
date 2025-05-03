@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\ItemPedido;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -24,20 +25,47 @@ class RelatorioVendasExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection()
     {
-        return Pedidos::whereBetween('data_entrega', [$this->data['data_inicio'], $this->data['data_fim']])
-            ->when($this->data['fornecedor_id'], function ($query) {
-                return $query->where('fornecedor_id', $this->data['fornecedor_id']);
-            })
-            ->when($this->data['motorista_id'], function ($query) {
-                return $query->where('motorista_id', $this->data['motorista_id']);
-            })
-            ->get();
+        $pedidos = ItemPedido::query()
+            ->join('entregas', 'item_pedido.id_entrega', '=', 'entregas.id') // Ajuste os nomes das colunas conforme necessário
+            ->select('item_pedido.*', 'entregas.*'); // Selecione os campos que você deseja
+
+        session()->forget('export_pedidos');
+
+        if ($this->data['data_inicio'] && $this->data['data_fim']) {
+            $pedidos->whereBetween('entregas.data_entrega', [$this->data['data_inicio'], $this->data['data_fim']]);
+        }
+
+        if ($this->data['fornecedor_id']) {
+            $pedidos->where('item_pedido.id_fornecedor', $this->data['fornecedor_id']);
+        }
+
+        if ($this->data['produto_id']) {
+            $pedidos->where('item_pedido.id_produto', $this->data['produto_id']);
+        }
+
+        if ($this->data['caminhao_id']) {
+            $pedidos->where('entregas.id_caminhao', $this->data['caminhao_id']);
+        }
+
+        if ($this->data['pago'] && $this->data['pago'] != 2) {
+            $pedidos->where('entregas.pago', $this->data['pago'] ? 1 : 0);
+        }
+
+        if ($this->data['motorista_id']) {
+            $pedidos->where('entregas.id_motorista', $this->data['motorista_id']);
+        }
+
+        $pedidos->whereNotNull('item_pedido.id_entrega');
+        $pedidos->orderBy('entregas.data_entrega', 'asc');
+        return $pedidos->get();
     }
 
     public function headings(): array
     {
         return [
-            'ID',
+            'Cliente',
+            'Produto',
+            'Quantidade (em mt³)',
             'Fornecedor',
             'Motorista',
             'Data de Entrega',
@@ -48,10 +76,12 @@ class RelatorioVendasExport implements FromCollection, WithHeadings, WithMapping
     public function map($row): array
     {
         return [
-            str_pad($row->id, 6, '0', STR_PAD_LEFT),
+            $row?->pedidos?->clientes ? $row->pedidos->clientes->nome : 'N/A',
+            $row?->produtos?->descricao ?? 'N/A',
+            $row->quantidade,
             $row->fornecedor ? $row->fornecedor->razao_social : 'N/A',
-            $row->motoristas ? $row->motoristas->nome : 'N/A',
-            $row->data_entrega ? date("d/m/Y", strtotime($row->data_entrega)) : '',
+            $row?->entregas?->motoristas ? $row?->entregas?->motoristas?->nome : 'N/A',
+            $row->data_entrega ? date('d/m/Y', strtotime($row->data_entrega)) : 'N/A',
             number_format($row->valor, 2, ',', '.')
         ];
     }
@@ -70,24 +100,29 @@ class RelatorioVendasExport implements FromCollection, WithHeadings, WithMapping
                 $sheet = $event->sheet->getDelegate();
                 $highestRow = $sheet->getHighestRow();
                 $linhaFiltros = $linhaFiltroInicial = $highestRow + 2;
-                $arFilter = session()->get('export_pedidos')[0];
 
                 $sheet->setCellValue('A' . $linhaFiltros, 'Relatório de Pedidos');
                 $sheet->setCellValue('A' . $linhaFiltros++, 'Data da Exportação: ' . now()->format('d/m/Y H:i:s'));
 
-                if ($arFilter) {
-                    $sheet->setCellValue('A' . $linhaFiltros++, 'Data da Geração: ' . $arFilter['data_geracao']);
-                    if (isset($arFilter['data_inicio'])) {
-                        $sheet->setCellValue('A' . $linhaFiltros++, 'Data Início do Período: ' . date("d/m/Y", strtotime($arFilter['data_inicio'])));
+                if ($this->data) {
+                    $sheet->setCellValue('A' . $linhaFiltros++, 'Data da Geração: ' . $this->data['data_geracao']);
+                    if (isset($this->data['data_inicio'])) {
+                        $sheet->setCellValue('A' . $linhaFiltros++, 'Data Início do Período: ' . date("d/m/Y", strtotime($this->data['data_inicio'])));
                     }
-                    if (isset($arFilter['data_fim'])) {
-                        $sheet->setCellValue('A' . $linhaFiltros++, 'Data Fim do Período: ' . date("d/m/Y", strtotime($arFilter['data_fim'])));
+                    if (isset($this->data['data_fim'])) {
+                        $sheet->setCellValue('A' . $linhaFiltros++, 'Data Fim do Período: ' . date("d/m/Y", strtotime($this->data['data_fim'])));
                     }
-                    if (isset($arFilter['fornecedor_id'])) {
-                        $sheet->setCellValue('A' . $linhaFiltros++, 'Fornecedor: ' . $arFilter['fornecedor_id']);
+                    if (isset($this->data['fornecedor_id'])) {
+                        $sheet->setCellValue('A' . $linhaFiltros++, 'Fornecedor: ' . $this->data['fornecedor_id']);
                     }
-                    if (isset($arFilter['motorista_id'])) {
-                        $sheet->setCellValue('A' . $linhaFiltros++, 'Motorista: ' . $arFilter['motorista_id']);
+                    if (isset($this->data['motorista_id'])) {
+                        $sheet->setCellValue('A' . $linhaFiltros++, 'Motorista: ' . $this->data['motorista_id']);
+                    }
+                    if (isset($this->data['produto_id'])) {
+                        $sheet->setCellValue('A' . $linhaFiltros++, 'Produto: ' . $this->data['produto_id']);
+                    }
+                    if (isset($this->data['caminhao_id'])) {
+                        $sheet->setCellValue('A' . $linhaFiltros++, 'Caminhão: ' . $this->data['caminhao_id']);
                     }
                 }
                 $cellRange = "A1:E" .$linhaFiltroInicial-2;
@@ -109,6 +144,8 @@ class RelatorioVendasExport implements FromCollection, WithHeadings, WithMapping
                 $sheet->getStyle('C1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('D1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('E1')->getFont()->setBold(true)->setSize(14);
+                $sheet->getStyle('F1')->getFont()->setBold(true)->setSize(14);
+                $sheet->getStyle('G1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('A' .$linhaFiltroInicial . ':A' . $linhaFiltros)->getFont()->setItalic(true)->setSize(10);
             }
         ];

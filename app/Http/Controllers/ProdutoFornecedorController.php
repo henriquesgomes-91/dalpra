@@ -29,7 +29,8 @@ class ProdutoFornecedorController extends Controller
         $request->validate([
             'id_fornecedor' => 'required|exists:fornecedor,id',
             'id_produto' => 'required|exists:produtos,id',
-            'valor' => 'required|numeric',
+            'custo' => 'required|numeric',
+            'preco_venda' => 'required|numeric',
         ]);
         ProdutoFornecedor::create($request->all());
         return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor criado com sucesso!');
@@ -50,7 +51,8 @@ class ProdutoFornecedorController extends Controller
         $request->validate([
             'id_fornecedor' => 'required|exists:fornecedor,id',
             'id_produto' => 'required|exists:produtos,id',
-            'valor' => 'required|numeric',
+            'custo' => 'required|numeric',
+            'preco_venda' => 'required|numeric',
         ]);
         $produtofornecedor->update($request->all());
         return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor atualizado com sucesso!');
