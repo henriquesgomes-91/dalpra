@@ -63,9 +63,11 @@ class EntregaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Entrega $entrega)
+    public function show($id)
     {
-        //
+        $entrega = Entrega::findOrFail($id);
+        $itensPedido = ItemPedido::where('id_entrega', $id)->get();
+        return view('entregas.show', compact('entrega', 'itensPedido'));
     }
 
     /**

@@ -18,13 +18,9 @@ class PedidoSeeder extends Seeder
         $clientes = DB::table('clientes')->pluck('id')->toArray();
         $fornecedores = DB::table('fornecedor')->pluck('id')->toArray();
         $produtos = DB::table('produtos')->pluck('id')->toArray();
-        $motoristas = DB::table('motoristas')->pluck('id')->toArray();
-        $caminhoes = DB::table('caminhao')->pluck('id')->toArray();
-
-        $pedidos = [];
 
         for ($i = 0; $i < 250; $i++) {
-            $pedidos[] = [
+            $pedidos = [
                 'id_cliente' => Arr::random($clientes) ?: null,
                 'logradouro' => 'Rua ' . ($i + 1),
                 'numero' => rand(1, 100),
@@ -32,18 +28,27 @@ class PedidoSeeder extends Seeder
                 'bairro' => 'Bairro ' . ($i + 1),
                 'cidade' => rand(1, 10) < 5 ? 'Curitiba' : 'Colombo',
                 'estado' => 'PR',
-                'id_fornecedor' => Arr::random($fornecedores),
-                'id_produto' => Arr::random($produtos),
-                'valor' => rand(1, 1000),
-                'id_motorista' => Arr::random($motoristas) ?: null,
-                'id_caminhao' => Arr::random($caminhoes) ?: null,
-                'pago' => rand(0, 1) ? 1 : 0,
-                'data_entrega' => \Carbon\Carbon::create(2025, 4, 1)->addDays(rand(1, 30)),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-        }
 
-        Pedidos::insert($pedidos);
+            $objPedido = Pedidos::create($pedidos);
+
+            $contadorTotal = 0;
+            for ($j = 0; $j < rand(1, 10); $j++) {
+                $valorProduto = rand(1, 100);
+                DB::table('item_pedido')->insert([
+                    'id_pedido' => $objPedido->id,
+                    'id_fornecedor' => Arr::random($fornecedores),
+                    'id_produto' => Arr::random($produtos),
+                    'quantidade' => rand(1, 10),
+                    'valor' => $valorProduto,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                $contadorTotal += $valorProduto;
+            }
+            $objPedido->update(['valor' => $contadorTotal]);
+        }
     }
 }

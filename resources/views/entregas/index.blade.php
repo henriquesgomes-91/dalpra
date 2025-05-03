@@ -74,8 +74,8 @@
                 <tbody>
                 @foreach($entregas as $entrega)
                     <tr>
-                        <td class="col-2">{{ $entrega->entregas->motoristas->nome }}</td>
-                        <td class="col-2">{{ $entrega->entregas->caminhao->descricao }} / {{ $entrega->entregas->caminhao->placa }}</td>
+                        <td class="col-2">{{ $entrega->entregas?->motoristas->nome ?? 'N/A' }}</td>
+                        <td class="col-2">{{ $entrega->entregas?->caminhao->descricao ?? 'N/A' }} / {{ $entrega->entregas?->caminhao->placa ?? 'N/A' }}</td>
                         <td class="col-2">{{ $entrega->fornecedor->razao_social }}</td>
                         <td class="col-1">{{ $entrega->produtos->descricao }}</td>
                         <td class="col-1">{{ $entrega->quantidade }}</td>

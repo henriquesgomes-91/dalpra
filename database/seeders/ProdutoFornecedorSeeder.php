@@ -21,11 +21,12 @@ class ProdutoFornecedorSeeder extends Seeder
 
         foreach ($produtos as $produtoId) {
             foreach ($fornecedores as $fornecedorId) {
+                $preco = rand(1, 1000);
                 $produtosFornecedores[] = [
                     'id_produto' => $produtoId,
                     'id_fornecedor' => $fornecedorId,
-                    'preco_venda' => rand(1, 1000),
-                    'custo' => rand(1, 1000),
+                    'preco_venda' => $preco + rand(100, 200),
+                    'custo' => $preco,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

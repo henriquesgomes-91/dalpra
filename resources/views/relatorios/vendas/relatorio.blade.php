@@ -23,20 +23,11 @@
                 &nbsp;&nbsp;<input type="radio" name="pago" value="2" id="todos"><label for="todos">&nbsp;Todos</label>
             </div>
             <div class="form-group">
-                <label for="fornecedor_id">Caminhão:</label>
-                <select name="fornecedor_id" class="form-control">
+                <label for="produto_id">Produto:</label>
+                <select name="produto_id" class="form-control">
                     <option value="">Selecione</option>
-                    @foreach($fornecedores as $fornecedor)
-                        <option value="{{ $fornecedor->id }}">{{ $fornecedor->razao_social }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="fornecedor_id">Produto:</label>
-                <select name="fornecedor_id" class="form-control">
-                    <option value="">Selecione</option>
-                    @foreach($fornecedores as $fornecedor)
-                        <option value="{{ $fornecedor->id }}">{{ $fornecedor->razao_social }}</option>
+                    @foreach($produtos as $produto)
+                        <option value="{{ $produto->id }}">{{ $produto->descricao }}</option>
                     @endforeach
                 </select>
             </div>
@@ -55,6 +46,15 @@
                     <option value="">Selecione</option>
                     @foreach($motoristas as $motorista)
                         <option value="{{ $motorista->id }}">{{ $motorista->nome }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="caminhao_id">Caminhão:</label>
+                <select name="caminhao_id" class="form-control">
+                    <option value="">Selecione</option>
+                    @foreach($caminhoes as $caminhao)
+                        <option value="{{ $caminhao->id }}">{{ $caminhao->descricao }} / {{ $caminhao->placa }}</option>
                     @endforeach
                 </select>
             </div>
