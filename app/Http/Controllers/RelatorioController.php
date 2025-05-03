@@ -21,7 +21,7 @@ class RelatorioController extends Controller
         $produtos = Produto::get();
         $caminhoes = Caminhao::get();
 
-        return view('relatorios.vendas.relatorio', compact( 'fornecedores', 'motoristas', 'produtos', 'caminhoes'));
+        return view('relatorios.entregas.relatorio', compact( 'fornecedores', 'motoristas', 'produtos', 'caminhoes'));
 
     }
 
@@ -64,11 +64,11 @@ class RelatorioController extends Controller
 
         session()->push('export_pedidos', $arFilter);
         $pedidos = $pedidos->get();
-        return view('relatorios.vendas.resultado', compact('pedidos'));
+        return view('relatorios.entregas.resultado', compact('pedidos'));
     }
 
     public function exportar(Request $request)
     {
-        return Excel::download(new RelatorioVendasExport($request->all()), 'relatorio_vendas.xlsx');
+        return Excel::download(new RelatorioVendasExport($request->all()), 'relatorio_entregas.xlsx');
     }
 }

@@ -7,7 +7,7 @@
     <div class="container">
         <h1>Relatório de Vendas</h1>
 
-        <form action="{{ route('relatorio.vendas.generate') }}" method="POST">
+        <form action="{{ route('relatorio.entregas.generate') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="data_inicio">Data Início:</label>

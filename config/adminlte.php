@@ -354,8 +354,8 @@ return [
         ],
         ['header' => 'Relatórios'],
         [
-            'text' => 'Vendas',
-            'url'  => '/relatorios/vendas',
+            'text' => 'Entregas',
+            'url'  => '/relatorios/entregas',
             'icon' => 'fas fa-chart-line',
         ],
     ],

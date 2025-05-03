@@ -12,7 +12,7 @@
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#tabela_relatorio_vendas').DataTable({
+            $('#tabela_relatorio_entregas').DataTable({
                 language: {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -53,7 +53,7 @@
 @section('content')
     <div class="row table-responsive">
         <div class="col-12">
-            <table id="tabela_relatorio_vendas" class="table table-bordered table-hover">
+            <table id="tabela_relatorio_entregas" class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th class="col-3">Cliente</th>
@@ -94,10 +94,10 @@
         </div>
         <div class="row">
             <div class="col-6 text-left">
-                <a href="{{ route('relatorio.vendas.exportar') }}" class="btn btn-success mb-3">Exportar para Excel</a>
+                <a href="{{ route('relatorio.entregas.exportar') }}" class="btn btn-success mb-3">Exportar para Excel</a>
             </div>
             <div class="col-6 text-right">
-                <a href="{{ route('relatorio.vendas') }}" class="btn btn-secondary mb-3">Voltar</a>
+                <a href="{{ route('relatorio.entregas') }}" class="btn btn-secondary mb-3">Voltar</a>
             </div>
         </div>
 
