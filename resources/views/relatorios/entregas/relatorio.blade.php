@@ -2,10 +2,10 @@
 @push('css')
     @vite(['resources/sass/custom.scss'])
 @endpush
-@section('title', 'Relatório de Vendas')
+@section('title', 'Relatório de Entregas')
 @section('content')
     <div class="container">
-        <h1>Relatório de Vendas</h1>
+        <h1>Relatório de Entregas</h1>
 
         <form action="{{ route('relatorio.entregas.generate') }}" method="POST">
             @csrf
