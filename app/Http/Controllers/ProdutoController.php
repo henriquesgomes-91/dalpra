@@ -61,10 +61,10 @@ class ProdutoController extends Controller
         return response()->json($arRetorno);
     }
 
-    public function valorPorProduto($id)
+    public function valorPorProduto($idFornecedor, $idProduto)
     {
-        $produto = ProdutoFornecedor::where('id_produto', $id)->first();
-        return response()->json(['preco_venda' => $produto->valor]);
+        $produto = ProdutoFornecedor::where('id_fornecedor', $idFornecedor)->where('id_produto', $idProduto)->first();
+        return response()->json(['preco_venda' => number_format($produto->preco_venda, 2)]);
     }
 
     public function show(Produto $produto)

@@ -12,25 +12,15 @@ class Pedidos extends Model
 
     protected $table = 'pedidos';
 
-    protected $with = ['clientes', 'motoristas', 'caminhao'];
+    protected $with = ['clientes'];
 
     protected $fillable = [
-        'id_cliente', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'estado', 'id_motorista', 'id_caminhao', 'pago', 'data_entrega'
+        'id_cliente', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'estado', 'valor'
     ];
 
     public function clientes()
     {
         return $this->belongsTo(Cliente::class, 'id_cliente');
-    }
-
-    public function motoristas()
-    {
-        return $this->belongsTo(Motorista::class, 'id_motorista');
-    }
-
-    public function caminhao()
-    {
-        return $this->belongsTo(Caminhao::class, 'id_caminhao');
     }
 
     public function itemPedido()

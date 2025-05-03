@@ -10,8 +10,18 @@
 @endsection
 @push('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#valor').maskMoney({
+                prefix: 'R$ ',
+                allowNegative: false,
+                thousands: '.',
+                decimal: ',',
+                affixesStay: false
+            });
+
             $('#itemModal').on('show.bs.modal', function() {
                 $('#id_fornecedor').val('');
                 $('#id_produto').empty(); // Limpa todas as opções do select de produtos
@@ -21,17 +31,23 @@
             $('#save-item').click(function() {
                 const fornecedorId = $('#id_fornecedor').val();
                 const produtoId = $('#id_produto').val();
-                const valor = $('#valor').val();
+                const valor = $('#valor').val().replace('.', '').replace(',', '.');
 
                 if (fornecedorId && produtoId && valor) {
                     const fornecedorText = $('#id_fornecedor option:selected').text();
                     const produtoText = $('#id_produto option:selected').text();
+                    let numeroFormatado = valor.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
 
                     const newRow = `
                     <tr>
                         <td>${fornecedorText}</td>
                         <td>${produtoText}</td>
-                        <td>${valor}</td>
+                        <td>R$ ${numeroFormatado}</td>
                         <td>
                             <input type="hidden" name="fornecedores[]" value="${fornecedorId}">
                             <input type="hidden" name="produtos[]" value="${produtoId}">
@@ -76,12 +92,13 @@
 
             $('#id_produto').change(function() {
                 var produtoId = $(this).val();
+                var fornecedorId = $("#id_fornecedor").val();
                 if (produtoId) {
                     $.ajax({
-                        url: '/produto/' + produtoId,
+                        url: '/produto/' + fornecedorId + '/' + produtoId + '/preco',
                         type: 'GET',
                         success: function(data) {
-                            $('#valor').val(data.valor); // Preencher o valor do produto
+                            $('#valor').val(data.preco_venda);
                         }
                     });
                 } else {
@@ -151,32 +168,6 @@
                     </tbody>
                 </table>
 
-                <div class="form-group">
-                    <label for="id_motorista">Motorista</label>
-                    <select name="id_motorista" id="id_motorista" class="form-control">
-                        <option value="">Selecione</option>
-                        @foreach($motoristas as $motorista)
-                            <option value="{{ $motorista->id }}">{{ $motorista->nome }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="id_caminhao">Caminhão</label>
-                    <select name="id_caminhao" id="id_caminhao" class="form-control">
-                        <option value="">Selecione</option>
-                        @foreach($caminhoes as $caminhao)
-                            <option value="{{ $caminhao->id }}">{{ $caminhao->descricao }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="pago">Pago</label>
-                    <input type="checkbox" name="pago" value="1" id="pago">
-                </div>
-                <div class="form-group">
-                    <label for="data_entrega">Data de Entrega</label>
-                    <input type="date" name="data_entrega" class="form-control">
-                </div>
                 <div class="row">
                     <div class="col-6 text-left">
                         <button type="submit" class="btn btn-success">Salvar</button>
@@ -216,7 +207,7 @@
                     </div>
                     <div class="form-group">
                         <label for="valor">Preço de Venda</label>
-                        <input type="number" name="valor" id="valor" class="form-control" value="" required step="0.01">
+                        <input type="text" name="valor" id="valor" class="form-control" value="" required step="0.01">
                     </div>
                 </div>
                 <div class="modal-footer">

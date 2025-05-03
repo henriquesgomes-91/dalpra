@@ -28,4 +28,9 @@ class ItemPedido extends Model
     {
         return $this->belongsTo(Produto::class, 'id_produto');
     }
+
+    public function entregas()
+    {
+        return $this->hasMany(Pedidos::class, 'id_item_pedido');
+    }
 }

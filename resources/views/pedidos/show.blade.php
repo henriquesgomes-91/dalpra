@@ -39,32 +39,36 @@
         <p>{{$pedido->estado}}</p>
     </div>
     <div class="form-group">
-        <label>Fornecedor:</label>
-        <p>{{$pedido->fornecedor ? $pedido->fornecedor->razao_social : 'N/A'}}</p>
-    </div>
-    <div class="form-group">
-        <label>Produto:</label>
-        <p>{{$pedido->produtos->descricao}}</p>
-    </div>
-    <div class="form-group">
         <label>Valor:</label>
         <p>{{'R$ '.number_format($pedido->valor, 2, ',', '.')}}</p>
     </div>
-    <div class="form-group">
-        <label>Motorista:</label>
-        <p>{{$pedido->motoristas ? $pedido->motoristas->nome : 'N/A'}}</p>
-    </div>
-    <div class="form-group">
-        <label>Caminhão:</label>
-        <p>{{$pedido->caminhao ? $pedido->caminhao->descricao : 'N/A'}}</p>
-    </div>
-    <div class="form-group">
-        <label>Pago:</label>
-        <p>{{$pedido->pago ? 'Sim' : 'Nao'}}</p>
-    </div>
-    <div class="form-group">
-        <label>Data de Entrega:</label>
-        <p>{{$pedido->data_entrega ? date('d/m/Y', strtotime($pedido->data_entrega)) : 'N/A'}}</p>
-    </div>
+
+    <h3>Itens do Pedido</h3>
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th>Fornecedor</th>
+            <th>Produto</th>
+            <th>Valor</th>
+        </tr>
+        </thead>
+        <tbody id="itens-container">
+        @if($pedido->itemPedido)
+            @foreach($pedido->itemPedido as $item)
+                <tr>
+                    <td>{{$item->fornecedor->razao_social}}</td>
+                    <td>{{$item->produtos->descricao}}</td>
+                    <td>{{'R$ '.number_format($item->valor, 2, ',', '.')}}</td>
+                    <td>
+                        <input type="hidden" name="fornecedores[]" value="{{$item->id_fornecedor}}">
+                        <input type="hidden" name="produtos[]" value="{{$item->id_produto}}">
+                        <input type="hidden" name="valores[]" value="{{$item->valor}}">
+                    </td>
+                </tr>
+            @endforeach
+        @endif
+        <!-- Itens adicionados aparecerão aqui -->
+        </tbody>
+    </table>
     <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">Voltar</a>
 @endsection

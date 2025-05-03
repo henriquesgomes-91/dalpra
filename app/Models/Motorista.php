@@ -16,7 +16,7 @@ class Motorista extends Model
 
     protected $fillable = ['nome', 'comissao'];
 
-    public function pedidos()
+    public function entregas()
     {
         return $this->hasMany(Pedidos::class, 'id_motorista');
     }

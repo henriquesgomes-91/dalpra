@@ -13,8 +13,30 @@
     <script>
         $(document).ready(function() {
             $('#tabela_pedidos').DataTable({
-                'language': {
-                    url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese.json'
+                language: {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "zeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "emptyTable": "Nenhum registro encontrado.",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
                 },
                 columnDefs: [
                     { orderable: false, targets: -1 }
@@ -40,24 +62,18 @@
             <table id="tabela_pedidos" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th class="col-1">ID</th>
-                    <th class="col-2">Cliente</th>
-                    <th class="col-3">Fornecedor</th>
-                    <th class="col-2">Produto</th>
-                    <th class="col-1">Valor</th>
-                    <th class="col-1">Data de Entrega</th>
+                    <th class="col-2">ID</th>
+                    <th class="col-5">Cliente</th>
+                    <th class="col-3">Valor</th>
                     <th class="col-2">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($pedidos as $pedido)
                     <tr>
-                        <td class="col-1">{{ $pedido->id }}</td>
-                        <td class="col-2">{{ $pedido->clientes ? $pedido->clientes->nome : 'N/A' }}</td>
-                        <td class="col-3">{{ $pedido->fornecedor ? $pedido->fornecedor->razao_social : 'N/A' }}</td>
-                        <td class="col-2">{{ $pedido->produtos ? $pedido->produtos->descricao : 'N/A' }}</td>
-                        <td class="col-1">{{ 'R$ ' . number_format($pedido->valor, 2, ',', '.') }}</td>
-                        <td class="col-1">{{ $pedido->data_entrega ? date('d/m/Y', strtotime($pedido->data_entrega)) : 'N/A' }}</td>
+                        <td class="col-2">{{ $pedido->id }}</td>
+                        <td class="col-5">{{ $pedido->clientes ? $pedido->clientes->nome : 'N/A' }}</td>
+                        <td class="col-3">{{ 'R$ ' . number_format($pedido->valor, 2, ',', '.') }}</td>
                         <td class="col-2 text-center">
                             <a title="Visualizar" href="{{ route('pedidos.show', $pedido) }}" class="btn btn-outline-dark move">
                                 <i class="fas fa-eye"></i>
