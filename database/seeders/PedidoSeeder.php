@@ -28,6 +28,7 @@ class PedidoSeeder extends Seeder
                 'bairro' => 'Bairro ' . ($i + 1),
                 'cidade' => rand(1, 10) < 5 ? 'Curitiba' : 'Colombo',
                 'estado' => 'PR',
+                'valor' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
