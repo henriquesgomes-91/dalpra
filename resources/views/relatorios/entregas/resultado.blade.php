@@ -2,7 +2,7 @@
 @push('css')
     @vite(['resources/sass/custom.scss'])
 @endpush
-@section('title', 'Relatório de Vendas')
+@section('title', 'Relatório de Entregas')
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
 @endpush
@@ -47,7 +47,7 @@
     </script>
 @endpush
 @section('content_header')
-    <h1>Relatório de Vendas</h1>
+    <h1>Relatório de Entregas</h1>
     <hr class="hr-dalpra">
 @endsection
 @section('content')
