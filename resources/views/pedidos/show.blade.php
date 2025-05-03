@@ -49,6 +49,7 @@
         <tr>
             <th>Fornecedor</th>
             <th>Produto</th>
+            <th>Quantidade</th>
             <th>Valor</th>
         </tr>
         </thead>
@@ -58,12 +59,9 @@
                 <tr>
                     <td>{{$item->fornecedor->razao_social}}</td>
                     <td>{{$item->produtos->descricao}}</td>
+                    <td>{{$item->quantidade}} mt(s)³</td>
                     <td>{{'R$ '.number_format($item->valor, 2, ',', '.')}}</td>
-                    <td>
-                        <input type="hidden" name="fornecedores[]" value="{{$item->id_fornecedor}}">
-                        <input type="hidden" name="produtos[]" value="{{$item->id_produto}}">
-                        <input type="hidden" name="valores[]" value="{{$item->valor}}">
-                    </td>
+
                 </tr>
             @endforeach
         @endif

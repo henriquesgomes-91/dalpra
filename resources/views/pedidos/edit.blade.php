@@ -22,18 +22,13 @@
                 affixesStay: false
             });
 
-            $('#itemModal').on('show.bs.modal', function() {
-                $('#id_fornecedor').val('');
-                $('#id_produto').empty(); // Limpa todas as opções do select de produtos
-                $('#valor').val('');
-            });
-
             $('#save-item').click(function() {
                 const fornecedorId = $('#id_fornecedor').val();
                 const produtoId = $('#id_produto').val();
+                const quantidade = $('#quantidade').val();
                 const valor = $('#valor').val().replace('R$ ', '').replace('.', '').replace(',', '.');
 
-                if (fornecedorId && produtoId && valor) {
+                if (fornecedorId && produtoId && valor && quantidade) {
                     const fornecedorText = $('#id_fornecedor option:selected').text();
                     const produtoText = $('#id_produto option:selected').text();
                     let numeroFormatado = valor.toLocaleString('pt-BR', {
@@ -47,10 +42,12 @@
                     <tr>
                         <td>${fornecedorText}</td>
                         <td>${produtoText}</td>
+                        <td>${quantidade}</td>
                         <td>R$ ${numeroFormatado}</td>
                         <td>
                             <input type="hidden" name="fornecedores[]" value="${fornecedorId}">
                             <input type="hidden" name="produtos[]" value="${produtoId}">
+                            <input type="hidden" name="quantidades[]" value="${quantidade}">
                             <input type="hidden" name="valores[]" value="${valor}">
                             <button type="button" class="btn btn-danger remove-item">Remover</button>
                         </td>
@@ -61,6 +58,7 @@
                     $('.fecharModal').trigger('click'); // Fecha a modal
                     $('#id_fornecedor').val('');
                     $('#id_produto').val('');
+                    $('#quantidade').val('');
                     $('#valor').val('');
                 } else {
                     alert('Por favor, preencha todos os campos.');
@@ -162,6 +160,7 @@
                     <tr>
                         <th>Fornecedor</th>
                         <th>Produto</th>
+                        <th>Quantidade</th>
                         <th>Valor</th>
                         <th>Ações</th>
                     </tr>
@@ -172,10 +171,12 @@
                             <tr>
                                 <td>{{$item->fornecedor->razao_social}}</td>
                                 <td>{{$item->produtos->descricao}}</td>
+                                <td>{{$item->quantidade ?? 0}}</td>
                                 <td>{{'R$ '.number_format($item->valor, 2, ',', '.')}}</td>
                                 <td>
                                     <input type="hidden" name="fornecedores[]" value="{{$item->id_fornecedor}}">
                                     <input type="hidden" name="produtos[]" value="{{$item->id_produto}}">
+                                    <input type="hidden" name="quantidades[]" value="{{$item->quantidade ?? 0}}">
                                     <input type="hidden" name="valores[]" value="{{$item->valor}}">
                                     <button type="button" class="btn btn-danger remove-item">Remover</button>
                                 </td>
@@ -224,6 +225,10 @@
                         <label for="id_produto">Produto</label>
                         <select name="id_produto" id="id_produto" class="form-control" required>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade (em mt³)</label>
+                        <input type="number" name="quantidade" id="quantidade" class="form-control" value="" required>
                     </div>
                     <div class="form-group">
                         <label for="valor">Preço de Venda</label>

@@ -12,10 +12,10 @@ class Entrega extends Model
 
     protected $table = 'entregas';
 
-    protected $with = ['item_pedido', 'motoristas', 'caminhao'];
+    protected $with = ['motoristas', 'caminhao'];
 
     protected $fillable = [
-        'id_motorista', 'id_item_pedido', 'id_caminhao', 'pago', 'data_entrega'
+        'id_motorista', 'id_caminhao', 'pago', 'data_entrega'
     ];
 
     public function motoristas()
@@ -30,7 +30,6 @@ class Entrega extends Model
 
     public function itemPedido()
     {
-        return $this->belongsTo(ItemPedido::class, 'id_item_pedido');
+        return $this->hasMany(ItemPedido::class, 'id_entrega');
     }
-
 }

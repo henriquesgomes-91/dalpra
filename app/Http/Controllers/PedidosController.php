@@ -24,7 +24,7 @@ class PedidosController extends Controller
     {
         $clientes = Cliente::get();
         $fornecedores = Fornecedor::get();
-        return view('pedidos.create', compact('clientes', 'fornecedores', 'motoristas', 'caminhoes'));
+        return view('pedidos.create', compact('clientes', 'fornecedores'));
     }
 
     public function store(Request $request)
@@ -37,16 +37,18 @@ class PedidosController extends Controller
             'bairro' => 'required|string|max:100',
             'cidade' => 'required|string|max:100',
             'estado' => 'required|string|max:2',
+            'quantidades' => '',
             'fornecedores' => '',
             'produtos' => '',
             'valores' => ''
         ]);
 
         try{
-            $arItens = array_merge(['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
+            $arItens = array_merge(['quantidades' => $arDados['quantidades']],['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
             DB::transaction(function () use ($arDados, $arItens) {
                 unset($arDados['fornecedores']);
                 unset($arDados['produtos']);
+                unset($arDados['quantidades']);
                 unset($arDados['valores']);
                 $objPedido = Pedidos::create($arDados);
 
@@ -57,6 +59,7 @@ class PedidosController extends Controller
                     $arDadosInsertItem['id_fornecedor'] = $value;
                     $arDadosInsertItem['id_produto'] = $arItens['produtos'][$key];
                     $arDadosInsertItem['valor'] = $arItens['valores'][$key];
+                    $arDadosInsertItem['quantidade'] = $arItens['quantidades'][$key] ?? 0;
                     $intTotalPedido+= $arItens['valores'][$key];
                     ItemPedido::create($arDadosInsertItem);
                 }
@@ -88,16 +91,18 @@ class PedidosController extends Controller
             'bairro' => 'required|string|max:100',
             'cidade' => 'required|string|max:100',
             'estado' => 'required|string|max:2',
+            'quantidades' => '',
             'fornecedores' => '',
             'produtos' => '',
             'valores' => ''
         ]);
 
         try{
-            $arItens = array_merge(['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
+            $arItens = array_merge(['quantidades' => $arDados['quantidades']],['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
             DB::transaction(function () use ($arDados, $arItens, $pedido) {
                 unset($arDados['fornecedores']);
                 unset($arDados['produtos']);
+                unset($arDados['quantidades']);
                 unset($arDados['valores']);
                 $pedido->update($arDados);
 
@@ -111,6 +116,7 @@ class PedidosController extends Controller
                     $arDadosInsertItem['id_pedido'] = $pedido->id;
                     $arDadosInsertItem['id_fornecedor'] = $value;
                     $arDadosInsertItem['id_produto'] = $arItens['produtos'][$key];
+                    $arDadosInsertItem['quantidade'] = $arItens['quantidades'][$key] ?? 0;
                     $arDadosInsertItem['valor'] = $arItens['valores'][$key];
                     $intTotalPedido+= $arItens['valores'][$key];
                     ItemPedido::create($arDadosInsertItem);

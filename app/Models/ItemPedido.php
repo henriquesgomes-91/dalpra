@@ -10,9 +10,9 @@ class ItemPedido extends Model
 
     protected $table = 'item_pedido';
 
-    protected $with = ['pedidos', 'fornecedor', 'produtos'];
+    protected $with = ['pedidos','entregas', 'fornecedor', 'produtos'];
 
-    protected $fillable = ['id_pedido', 'id_fornecedor', 'id_produto', 'valor'];
+    protected $fillable = ['id_pedido', 'id_fornecedor', 'id_produto', 'valor', 'id_entrega', 'quantidade'];
 
     public function pedidos()
     {
@@ -31,6 +31,6 @@ class ItemPedido extends Model
 
     public function entregas()
     {
-        return $this->hasMany(Pedidos::class, 'id_item_pedido');
+        return $this->belongsTo(Entrega::class, 'id_entrega'); // A relação com a chave estrangeira id_entrega
     }
 }

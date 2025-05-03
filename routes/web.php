@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('fornecedor/{id}/produtos', [ProdutoController::class, 'produtosPorFornecedor']);
     Route::get('produto/{idFornecedor}/{idProduto}/preco', [ProdutoController::class, 'valorPorProduto']);
+    Route::get('/pedido/{id}/itens', [EntregaController::class, 'getItens']);
 
     Route::get('/relatorios/vendas', [RelatorioController::class, 'index'])->name('relatorio.vendas');
     Route::post('/relatorios/vendas', [RelatorioController::class, 'generate'])->name('relatorio.vendas.generate');

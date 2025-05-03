@@ -63,28 +63,32 @@
                 <tr>
                     <th class="col-2">Motorista</th>
                     <th class="col-2">Caminhão</th>
-                    <th class="col-3">Produto</th>
+                    <th class="col-2">Fornecedor</th>
+                    <th class="col-1">Produto</th>
+                    <th class="col-1">Quantidade</th>
                     <th class="col-1">Pago?</th>
-                    <th class="col-2">Data de Entrega</th>
+                    <th class="col-1">Data</th>
                     <th class="col-2">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($entregas as $entrega)
                     <tr>
-                        <td class="col-2">{{ $entrega->motoristas->nome }}</td>
-                        <td class="col-2">{{ $entrega->caminhao->descricao }} / {{ $entrega->caminhao->placa }}</td>
-                        <td class="col-3">{{ $entrega->itemPedido->produtos->descricao }}</td>
-                        <td class="col-1">{{ $entrega->pago ? 'Sim' : 'Nao' }}</td>
-                        <td class="col-2">{{ $entrega->data_entrega ? date('d/m/Y', strtotime($entrega->data_entrega)) : 'N/A' }}</td>
+                        <td class="col-2">{{ $entrega->entregas->motoristas->nome }}</td>
+                        <td class="col-2">{{ $entrega->entregas->caminhao->descricao }} / {{ $entrega->entregas->caminhao->placa }}</td>
+                        <td class="col-2">{{ $entrega->fornecedor->razao_social }}</td>
+                        <td class="col-1">{{ $entrega->produtos->descricao }}</td>
+                        <td class="col-1">{{ $entrega->quantidade }}</td>
+                        <td class="col-1">{{ $entrega->entregas->pago ? 'Sim' : 'Nao' }}</td>
+                        <td class="col-1">{{ $entrega->entregas->data_entrega ? date('d/m/Y', strtotime($entrega->entregas->data_entrega)) : 'N/A' }}</td>
                         <td class="col-2 text-center">
-                            <a title="Visualizar"  href="{{ route('entregas.show', $entrega) }}" class="btn btn-outline-dark move">
+                            <a title="Visualizar"  href="{{ route('entregas.show', $entrega->entregas->id) }}" class="btn btn-outline-dark move">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a title="Editar" href="{{ route('entregas.edit', $entrega) }}" class="btn btn-primary move">
+                            <a title="Editar" href="{{ route('entregas.edit', $entrega->entregas->id) }}" class="btn btn-primary move">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <form action="{{ route('entregas.destroy', $entrega) }}" method="POST" style="display:inline-block">
+                            <form action="{{ route('entregas.destroy', $entrega->entregas->id) }}" method="POST" style="display:inline-block">
                                 @csrf @method('DELETE')
                                 <button title="Excluir"  class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
                                     <i class="fas fa-trash"></i>
