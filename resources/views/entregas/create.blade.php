@@ -9,8 +9,9 @@
     <hr class="hr-dalpra">
 @endsection
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
+        window.$ = window.jQuery = require('jquery');
+        require('jquery-maskmoney');
         $(document).ready(function() {
             $('#pedido').change(function() {
                 var pedidoId = $(this).val();

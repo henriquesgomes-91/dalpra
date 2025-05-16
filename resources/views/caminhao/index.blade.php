@@ -3,14 +3,11 @@
     @vite(['resources/sass/custom.scss'])
 @endpush
 @section('title', 'Clientes')
-@push('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-@endpush
 
 @push('js')
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
+        window.$ = window.jQuery = require('jquery');
+        require('datatables.net');
         $(document).ready(function() {
             $('#tabela_caminhao').DataTable({
                 language: {
