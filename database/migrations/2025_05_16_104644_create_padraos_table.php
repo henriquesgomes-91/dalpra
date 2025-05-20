@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caminhao', function (Blueprint $table) {
+        Schema::create('padraos', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
-            $table->string('placa');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caminhao');
+        Schema::dropIfExists('padraos');
     }
 };

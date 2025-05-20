@@ -12,7 +12,7 @@ class Produto extends Model
 
     protected $table = 'produtos';
 
-    protected $fillable = ['descricao'];
+    protected $fillable = ['descricao', 'tipo_produto' ,'unidade_medida'];
 
     // Definindo a relação com ProdutoXFornecedor
     public function produtoFornecedor()

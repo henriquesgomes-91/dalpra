@@ -2,31 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fornecedor;
+use App\Http\Requests\FormRequestSaveMotorista;
 use App\Models\Motorista;
 use Illuminate\Http\Request;
 
 class MotoristaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $motoristas = Motorista::get();
+        $motoristas = Motorista::paginate(10);
         return view('motorista.index', compact('motoristas'));
     }
 
     public function create()
     {
-        return view('motorista.create');
+        return view('motorista.create', [
+            'motorista' => new Motorista
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(FormRequestSaveMotorista $request)
     {
-        $request->validate([
-            'nome' => 'required|string|max:100',
-            'comissao' => 'required|numeric',
-        ]);
-        Motorista::create($request->all());
-        return redirect()->route('motorista.index')->with('success', 'Motorista criado com sucesso!');
+        $dadosRequest = $request->validated();
+
+        if(Motorista::create($dadosRequest)){
+            return redirect()->route('motorista.index')->with('success', 'Motorista criado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    public function show($id, $str)
+    {
+        $motorista = Motorista::findOrFail($id);
+        $isDelete = $str == 'R';
+        return view('motorista.show', compact('motorista', 'isDelete'));
     }
 
     public function edit($id)
@@ -35,14 +45,16 @@ class MotoristaController extends Controller
         return view('motorista.edit', compact('motorista'));
     }
 
-    public function update(Request $request, Motorista $motorista)
+    public function update(FormRequestSaveMotorista $request, $id)
     {
-        $request->validate([
-            'nome' => 'required|string|max:100',
-            'comissao' => 'required|numeric',
-        ]);
-        $motorista->update($request->all());
-        return redirect()->route('motorista.index')->with('success', 'Motorista atualizado com sucesso!');
+        $dadosRequest = $request->validated();
+        $motorista = Motorista::findOrFail($id);
+
+        if($motorista->update($dadosRequest)){
+            return redirect()->route('motorista.index')->with('success', 'Motorista atualizado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function destroy($id)
@@ -50,11 +62,5 @@ class MotoristaController extends Controller
         $motorista = Motorista::findOrFail($id);
         $motorista->delete();
         return redirect()->route('motorista.index')->with('success', 'Motorista deletado com sucesso!');
-    }
-
-    public function show($id)
-    {
-        $motorista = Motorista::findOrFail($id);
-        return view('motorista.show', compact('motorista'));
     }
 }

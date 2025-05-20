@@ -18,9 +18,10 @@
     },
     "dependencies": {
         "bootstrap": "^5.3.5",
-        "datatables.net": "^2.3.0",
-        "datatables.net-dt": "^2.3.0",
+        "datatables.net": "^2.3.1",
+        "datatables.net-dt": "^2.3.1",
         "font-awesome": "^4.7.0",
+        "inputmask": "^5.0.9",
         "jquery": "^3.7.1",
         "jquery-maskmoney": "^3.0.2"
     }

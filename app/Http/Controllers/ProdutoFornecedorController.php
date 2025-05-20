@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FormRequestSaveProdutoFornecedor;
 use App\Models\ProdutoFornecedor;
 use App\Models\Fornecedor;
 use App\Models\Produto;
@@ -9,66 +10,71 @@ use Illuminate\Http\Request;
 
 class ProdutoFornecedorController extends Controller
 {
-    public function index()
+    public function index($idFornecedor)
     {
-        $produtosXFornecedores = ProdutoFornecedor::with(['fornecedor', 'produto'])->get();
-        return view('produtoFornecedor.index', compact('produtosXFornecedores'));
+        $produtos = ProdutoFornecedor::where('id_fornecedor', $idFornecedor)->paginate(10);
+        return view('fornecedor.produto.index', compact('produtos', 'idFornecedor'));
     }
 
-    public function create()
+    public function create($idFornecedor)
     {
-        $fornecedores = Fornecedor::get();
-        $produtos = Produto::get();
-        return view('produtoFornecedor.create', compact('fornecedores', 'produtos'));
-    }
+        $produtosDoFornecedor = ProdutoFornecedor::where('id_fornecedor', $idFornecedor)
+            ->pluck('id_produto')
+            ->toArray();
 
-    public function store(Request $request)
-    {
-        $request->merge(['valor' => str_replace(['R$', '.', ','], ['', '', '.'], $request->valor)]);
+        $produtosDisponiveis = Produto::whereNotIn('id', $produtosDoFornecedor)
+            ->get();
 
-        $request->validate([
-            'id_fornecedor' => 'required|exists:fornecedor,id',
-            'id_produto' => 'required|exists:produtos,id',
-            'custo' => 'required|numeric',
-            'preco_venda' => 'required|numeric',
+        return view('fornecedor.produto.create', [
+            'produtoFornecedor' => new ProdutoFornecedor,
+            'idFornecedor' => $idFornecedor,
+            'produtos' => $produtosDisponiveis
         ]);
-        ProdutoFornecedor::create($request->all());
-        return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor criado com sucesso!');
     }
 
-    public function edit($id)
+    public function store(FormRequestSaveProdutoFornecedor $request, $idFornecedor)
     {
-        $produtoxfornecedor = ProdutoFornecedor::findOrFail($id);
-        $fornecedores = Fornecedor::get();
-        $produtos = Produto::get();
-        return view('produtoFornecedor.edit', compact('produtoxfornecedor', 'fornecedores', 'produtos'));
+        $dadosRequest = $request->validated();
+
+        if(ProdutoFornecedor::create($dadosRequest)){
+            return redirect()->route('fornecedor.produto.index', ['idFornecedor' => $idFornecedor])
+                ->with('success', 'Produto cadastrado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
     }
 
-    public function update(Request $request, ProdutoFornecedor $produtofornecedor)
+    public function show($idFornecedor, $id, $str)
     {
-        $request->merge(['valor' => str_replace(['R$', '.', ','], ['', '', '.'], $request->valor)]);
-
-        $request->validate([
-            'id_fornecedor' => 'required|exists:fornecedor,id',
-            'id_produto' => 'required|exists:produtos,id',
-            'custo' => 'required|numeric',
-            'preco_venda' => 'required|numeric',
-        ]);
-        $produtofornecedor->update($request->all());
-        return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor atualizado com sucesso!');
+        $produto = ProdutoFornecedor::findOrFail($id);
+        $isDelete = $str == 'R';
+        return view('fornecedor.produto.show', compact('produto', 'isDelete', 'idFornecedor'));
     }
 
-    public function destroy($id)
+    public function edit($idFornecedor, $id)
     {
-        $produtofornecedor = ProdutoFornecedor::findOrFail($id);
-        $produtofornecedor->delete();
-        return redirect()->route('produtofornecedor.index')->with('success', 'Produto x Fornecedor deletado com sucesso!');
+        $produto = ProdutoFornecedor::findOrFail($id);
+        return view('fornecedor.produto.edit', compact('produto', 'idFornecedor'));
     }
 
-
-    public function show($id)
+    public function update(FormRequestSaveProdutoFornecedor $request, $idFornecedor, $id)
     {
-        $produtoxfornecedor = ProdutoFornecedor::findOrFail($id);
-        return view('produtoFornecedor.show', compact('produtoxfornecedor'));
+        $dadosRequest = $request->validated();
+        $produto = ProdutoFornecedor::findOrFail($id);
+
+        if($produto->update($dadosRequest)){
+            return redirect()->route('fornecedor.produto.index', ['idFornecedor' => $idFornecedor])
+                ->with('success', 'Produto atualizado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    public function destroy($idFornecedor, $id)
+    {
+        $produto = ProdutoFornecedor::findOrFail($id);
+        $produto->delete();
+        return redirect()->route('fornecedor.produto.index', ['idFornecedor' => $idFornecedor])
+            ->with('success', 'Produto deletado com sucesso!');
     }
 }

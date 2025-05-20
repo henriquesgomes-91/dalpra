@@ -2,50 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FormRequestSaveProduto;
 use App\Models\Produto;
 use App\Models\ProdutoFornecedor;
 use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produtos = Produto::all();
-        return view('produtos.index', compact('produtos'));
+        $produtos = Produto::paginate(5);
+        return view('produto.index', compact('produtos'));
     }
 
     public function create()
     {
-        return view('produtos.create');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'descricao' => 'required|string|max:100',
+        return view('produto.create', [
+            'produto' => new Produto
         ]);
-        Produto::create($request->all());
-        return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso!');
     }
 
-    public function edit(Produto $produto)
+    public function store(FormRequestSaveProduto $request)
     {
-        return view('produtos.edit', compact('produto'));
+        $dadosRequest = $request->validated();
+        if(Produto::create($dadosRequest)){
+            return redirect()->route('produto.index')->with('success', 'Produto criado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
     }
 
-    public function update(Request $request, Produto $produto)
+    public function show($id, $str)
     {
-        $request->validate([
-            'descricao' => 'required|string|max:100',
-        ]);
-        $produto->update($request->all());
-        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso!');
+        $produto = Produto::findOrFail($id);
+        $isDelete = $str == 'R';
+        return view('produto.show', compact('produto', 'isDelete'));
     }
 
-    public function destroy(Produto $produto)
+    public function edit($id)
     {
+        $produto = Produto::findOrFail($id);
+        return view('produto.edit', compact('produto'));
+    }
+
+    public function update(FormRequestSaveProduto $request, $id)
+    {
+        $dadosRequest = $request->validated();
+        $produto = Produto::findOrFail($id);
+
+        if($produto->update($dadosRequest)){
+            return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    public function destroy($id)
+    {
+        $produto = Produto::findOrFail($id);
         $produto->delete();
-        return redirect()->route('produtos.index')->with('success', 'Produto deletado com sucesso!');
+        return redirect()->route('produto.index')->with('success', 'Produto deletado com sucesso!');
     }
 
     public function produtosPorFornecedor($id)
@@ -67,8 +83,4 @@ class ProdutoController extends Controller
         return response()->json(['preco_venda' => number_format($produto->preco_venda, 2)]);
     }
 
-    public function show(Produto $produto)
-    {
-        return view('produtos.show', compact('produto'));
-    }
 }

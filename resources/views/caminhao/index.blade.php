@@ -1,47 +1,8 @@
 @extends('adminlte::page')
 @push('css')
-    @vite(['resources/sass/custom.scss'])
+    @vite(['resources/sass/custom.scss', 'resources/js/custom.js'])
 @endpush
-@section('title', 'Clientes')
-
-@push('js')
-    <script>
-        window.$ = window.jQuery = require('jquery');
-        require('datatables.net');
-        $(document).ready(function() {
-            $('#tabela_caminhao').DataTable({
-                language: {
-                    "sEmptyTable": "Nenhum registro encontrado",
-                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ".",
-                    "sLengthMenu": "_MENU_ resultados por página",
-                    "sLoadingRecords": "Carregando...",
-                    "sProcessing": "Processando...",
-                    "sZeroRecords": "Nenhum registro encontrado",
-                    "zeroRecords": "Nenhum registro encontrado",
-                    "sSearch": "Pesquisar",
-                    "emptyTable": "Nenhum registro encontrado.",
-                    "oPaginate": {
-                        "sNext": "Próximo",
-                        "sPrevious": "Anterior",
-                        "sFirst": "Primeiro",
-                        "sLast": "Último"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Ordenar colunas de forma ascendente",
-                        "sSortDescending": ": Ordenar colunas de forma descendente"
-                    }
-                },
-                columnDefs: [
-                    { orderable: false, targets: -1 }
-                ]
-            });
-        });
-    </script>
-@endpush
+@section('title', 'Caminhões')
 @section('content_header')
     <h1>Cadastro de Caminhões</h1>
     <hr class="hr-dalpra">
@@ -50,12 +11,17 @@
 
 @section('content')
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     @endif
 
     <div class="row table-responsive">
         <div class="col-12">
-            <table id="tabela_caminhao" class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th class="col-5">Descrição</th>
@@ -69,25 +35,26 @@
                         <td class="col-5">{{ $caminhao->descricao }}</td>
                         <td class="col-5">{{ $caminhao->placa }}</td>
                         <td class="col-2 text-center">
-                            <a title="Visualizar"  href="{{ route('caminhao.show', $caminhao) }}" class="btn btn-outline-dark move">
+                            <a title="Visualizar"  href="{{ route('caminhao.show', ['id' => $caminhao->id, 'str' => 'V']) }}" class="btn btn-outline-info move">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a title="Editar" href="{{ route('caminhao.edit', $caminhao) }}" class="btn btn-primary move">
+                            <a title="Editar" href="{{ route('caminhao.edit', $caminhao) }}" class="btn btn-outline-primary move">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <form action="{{ route('caminhao.destroy', $caminhao) }}" method="POST" style="display:inline-block">
-                                @csrf @method('DELETE')
-                                <button title="Excluir"  class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
-                                    <i class="fas fa-trash"></i>
-
-                                </button>
-                            </form>
+                            <a title="Excluir"  href="{{ route('caminhao.show', ['id' => $caminhao->id, 'str' => 'R']) }}" class="btn btn-outline-danger move">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+
+            <div class="mt-1">
+                {{ $caminhoes->links('pagination::bootstrap-5', ['locale' => 'pt-BR']) }}
+            </div>
         </div>
     </div>
+
 @endsection
 

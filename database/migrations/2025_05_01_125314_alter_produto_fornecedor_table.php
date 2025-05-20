@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::table('produto_fornecedor', function (Blueprint $table) {
             $table->renameColumn('valor', 'custo');
-
             $table->decimal('preco_venda', 10, 2)->nullable(); // Ajuste o tamanho e a precisão conforme necessário
         });
     }

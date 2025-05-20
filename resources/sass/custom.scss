@@ -6,7 +6,7 @@
 }
 
 body, html{
-    font-family: Sofia, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
     width: 100% !important;
     margin: auto !important;
     overflow-y: auto;
@@ -35,7 +35,7 @@ body:not(.layout-fixed) .main-sidebar {
 }
 
 [class*=sidebar-dark] .brand-link {
-    border-bottom: 2px solid #e8b505;
+    border-bottom: 2px solid #cebd20;
 }
 
 [class*=sidebar-dark-] {
@@ -55,26 +55,26 @@ body:not(.layout-fixed) .main-sidebar {
 .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active
 {
     font-size: 18px;
-    color: black;
-    background-color: #e8b505 !important;
+    color: #323335;
+    background-color: #cebd20 !important;
 }
 
 .button-dalpra {
-    background-color: #353A40;
+    background-color: #555355;
     color: white;
 }
 
 .button-dalpra:hover {
-    background-color: #e8b505;
-    color: black;
+    background-color: #cebd20;
+    color: #555355;
 }
 
 .btn {
     font-weight: 900 !important;
 }
 
-table.dataTable thead th {
-    background-color: #353A40; // Altere para a cor desejada
+table thead th {
+    background-color: #555355; // Altere para a cor desejada
     color: white; // Altere para a cor do texto desejada
 }
 
@@ -83,7 +83,7 @@ table th, table td {
 }
 
 .hr-dalpra {
-    border: 2px solid #353A40;
+    border: 2px solid #555355;
     width: 100%;
 
 }
@@ -98,4 +98,98 @@ table th, table td {
     50% { transform: translateX(2px); }
     75% { transform: translateX(-2px); }
     100% { transform: translateX(0); }
+}
+
+.dalpra_logo {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.brand-link {
+    padding: 0 !important;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 20px 0;
+}
+
+.pagination .page-link {
+    color: #555355;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 1rem;
+    font-size: 20px;
+    line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+}
+
+.pagination .page-link:hover {
+    color: #cebd20;
+    text-decoration: none;
+    background-color: #555355;
+    border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    z-index: 3;
+    font-weight: 900;
+    font-size: 20px;
+    color: #cebd20;
+    background-color: #555355;
+    border-color: #555355;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: default;
+}
+
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    padding: 0.5rem 0.75rem;
+}
+
+/* Remove o texto "Showing 1 to 10 of 12 results" */
+.pagination .d-flex {
+    display: none !important;
+}
+
+/* Estilo para o texto da paginação */
+.pagination .d-flex {
+    font-size: 1.1rem !important;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Estilo para os números */
+.pagination .page-link {
+    font-size: 1rem;
+}
+
+.alert-fade-out {
+    animation: fadeOut 0.5s ease-in;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        display: none;
+    }
+}
+
+[class*=sidebar-dark-] {
+    background: linear-gradient(to bottom, #000000 0%, #555355 100%);
 }

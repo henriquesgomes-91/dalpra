@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
             $table->string('descricao', 100);
+            $table->integer('tipo_produto')->default(1);
+            $table->string('unidade_medida', 5)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

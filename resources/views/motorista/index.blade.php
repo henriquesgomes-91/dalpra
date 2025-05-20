@@ -1,64 +1,27 @@
 @extends('adminlte::page')
 @push('css')
-    @vite(['resources/sass/custom.scss'])
+    @vite(['resources/sass/custom.scss', 'resources/js/custom.js'])
 @endpush
-@section('title', 'Motoristas')
-@push('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-@endpush
-
-@push('js')
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#tabela_motoristas').DataTable({
-                language: {
-                    "sEmptyTable": "Nenhum registro encontrado",
-                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ".",
-                    "sLengthMenu": "_MENU_ resultados por página",
-                    "sLoadingRecords": "Carregando...",
-                    "sProcessing": "Processando...",
-                    "sZeroRecords": "Nenhum registro encontrado",
-                    "zeroRecords": "Nenhum registro encontrado",
-                    "sSearch": "Pesquisar",
-                    "emptyTable": "Nenhum registro encontrado.",
-                    "oPaginate": {
-                        "sNext": "Próximo",
-                        "sPrevious": "Anterior",
-                        "sFirst": "Primeiro",
-                        "sLast": "Último"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Ordenar colunas de forma ascendente",
-                        "sSortDescending": ": Ordenar colunas de forma descendente"
-                    }
-                },
-                columnDefs: [
-                    { orderable: false, targets: -1 }
-                ]
-            });
-        });
-    </script>
-@endpush
+@section('title', 'Motorista')
 @section('content_header')
-    <h1>Cadastro de Motoristas</h1>
+    <h1>Cadastro de Motorista</h1>
     <hr class="hr-dalpra">
     <a href="{{ route('motorista.create') }}" class="btn button-dalpra mb-3"><b>Novo Motorista</b></a>
 @endsection
 
 @section('content')
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     @endif
 
     <div class="row table-responsive">
         <div class="col-12">
-            <table id="tabela_motoristas" class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th class="col-5">Nome</th>
@@ -72,24 +35,26 @@
                         <td class="col-5">{{ $motorista->nome }}</td>
                         <td class="col-5">R$ {{ number_format($motorista->comissao,2 , ',', '.') }}</td>
                         <td class="col-2 text-center">
-                            <a title="Visualizar" href="{{ route('motorista.show', $motorista) }}" class="btn btn-outline-dark move">
+                            <a title="Visualizar"  href="{{ route('motorista.show', ['id' => $motorista->id, 'str' => 'V']) }}" class="btn btn-outline-info move">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a title="Editar" href="{{ route('motorista.edit', $motorista) }}" class="btn btn-primary move">
+                            <a title="Editar" href="{{ route('motorista.edit', $motorista) }}" class="btn btn-outline-primary move">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <form action="{{ route('motorista.destroy', $motorista) }}" method="POST" style="display:inline-block">
-                                @csrf @method('DELETE')
-                                <button title="Excluir" class="btn btn-danger move" onclick="return confirm('Tem certeza?')">
-                                    <i class="fas fa-trash"></i>
-
-                                </button>
-                            </form>
+                            <a title="Excluir"  href="{{ route('motorista.show', ['id' => $motorista->id, 'str' => 'R']) }}" class="btn btn-outline-danger move">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+
+            <div class="mt-1">
+                {{ $motoristas->links('pagination::bootstrap-5', ['locale' => 'pt-BR']) }}
+            </div>
         </div>
     </div>
+
 @endsection
+

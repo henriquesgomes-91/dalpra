@@ -2,35 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FormRequestSaveCaminhao;
 use App\Models\Caminhao;
 use Illuminate\Http\Request;
 
 class CaminhaoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $caminhoes = Caminhao::orderBy('id', 'desc')->paginate(10);
+        $caminhoes = Caminhao::paginate(10);
         return view('caminhao.index', compact('caminhoes'));
     }
 
     public function create()
     {
-        return view('caminhao.create');
+        return view('caminhao.create', [
+            'caminhao' => new Caminhao
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(FormRequestSaveCaminhao $request)
     {
-        $dadosRequest = $request->validate([
-            'descricao' => 'required|string|max:255',
-            'placa' => 'nullable|string|max:20',
-        ]);
+        $dadosRequest = $request->validated();
 
-        $arDadosCaminhao['descricao'] = $dadosRequest['descricao'];
-        $arDadosCaminhao['placa'] = $dadosRequest['placa'];
+        if(Caminhao::create($dadosRequest)){
+            return redirect()->route('caminhao.index')->with('success', 'Caminhão criado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
+    }
 
-        Caminhao::create($arDadosCaminhao);
-
-        return redirect()->route('caminhao.index')->with('success', 'Caminhão criado com sucesso!');
+    public function show($id, $str)
+    {
+        $caminhao = Caminhao::findOrFail($id);
+        $isDelete = $str == 'R';
+        return view('caminhao.show', compact('caminhao', 'isDelete'));
     }
 
     public function edit($id)
@@ -39,29 +45,23 @@ class CaminhaoController extends Controller
         return view('caminhao.edit', compact('caminhao'));
     }
 
-    public function update(Request $request, Caminhao $caminhao)
+    public function update(FormRequestSaveCaminhao $request, $id)
     {
-        $request->validate([
-            'descricao' => 'required|string|max:255',
-            'placa' => 'nullable|string|max:20',
-        ]);
+        $dadosRequest = $request->validated();
+        $caminhao = Caminhao::findOrFail($id);
 
-        $caminhao->update($request->all());
-
-        return redirect()->route('caminhao.index')->with('success', 'Caminhão atualizado com sucesso!');
+        if($caminhao->update($dadosRequest)){
+            return redirect()->route('caminhao.index')->with('success', 'Caminhão atualizado com sucesso!');
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function destroy($id)
     {
         $caminhao = Caminhao::findOrFail($id);
         $caminhao->delete();
-        return redirect()->route('caminhao.index')->with('success', 'Caminhão removido!');
+        return redirect()->route('caminhao.index')->with('success', 'Caminhão deletado com sucesso!');
     }
 
-
-    public function show($id)
-    {
-        $caminhao = Caminhao::findOrFail($id);
-        return view('caminhao.show', compact('caminhao'));
-    }
 }
