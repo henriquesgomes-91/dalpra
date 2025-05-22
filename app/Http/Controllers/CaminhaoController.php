@@ -10,7 +10,7 @@ class CaminhaoController extends Controller
 {
     public function index(Request $request)
     {
-        $caminhoes = Caminhao::paginate(10);
+        $caminhoes = Caminhao::paginate(5);
         return view('caminhao.index', compact('caminhoes'));
     }
 

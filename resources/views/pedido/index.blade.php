@@ -6,7 +6,7 @@
 @section('content_header')
     <h1>Cadastro de Caminhões</h1>
     <hr class="hr-dalpra">
-    <a href="{{ route('produto.create') }}" class="btn button-dalpra mb-3"><b>Novo Produto</b></a>
+    <a href="{{ route('pedido.create') }}" class="btn button-dalpra mb-3"><b>Novo Pedido</b></a>
 @endsection
 
 @section('content')
@@ -24,26 +24,26 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th class="col-6">Descrição</th>
-                    <th class="col-2">Unidade de Medida</th>
-                    <th class="col-2">Tipo de Produto</th>
+                    <th class="col-2">ID</th>
+                    <th class="col-5">Cliente</th>
+                    <th class="col-3">Valor</th>
                     <th class="col-2">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($produtos as $produto)
+                @foreach($pedidos as $pedido)
                     <tr>
-                        <td class="col-5">{{ $produto->descricao }}</td>
-                        <td class="col-2">{{ \App\Helpers\Tools::formatarUnidadeMedida($produto->unidade_medida) }}</td>
-                        <td class="col-2">{{ $produto->tipo_produto == 1 ? 'Produto' : 'Serviço' }}</td>
+                        <td class="col-2">{{ str_pad($pedido->id, 6, '0', STR_PAD_LEFT) }}</td>
+                        <td class="col-5">{{ $pedido->clientes ? $pedido->clientes->nome : 'N/A' }}</td>
+                        <td class="col-3">{{ 'R$ ' . number_format($pedido->valor, 2, ',', '.') }}</td>
                         <td class="col-2 text-center">
-                            <a title="Visualizar"  href="{{ route('produto.show', ['id' => $produto->id, 'str' => 'V']) }}" class="btn btn-outline-info move">
+                            <a title="Visualizar"  href="{{ route('pedido.show', ['id' => $pedido->id, 'str' => 'V']) }}" class="btn btn-outline-info move">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a title="Editar" href="{{ route('produto.edit', $produto) }}" class="btn btn-outline-primary move">
+                            <a title="Editar" href="{{ route('pedido.edit', $pedido) }}" class="btn btn-outline-primary move">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <a title="Excluir"  href="{{ route('produto.show', ['id' => $produto->id, 'str' => 'R']) }}" class="btn btn-outline-danger move">
+                            <a title="Excluir"  href="{{ route('pedido.show', ['id' => $pedido->id, 'str' => 'R']) }}" class="btn btn-outline-danger move">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
@@ -53,7 +53,7 @@
             </table>
 
             <div class="mt-1">
-                {{ $produtos->links('pagination::bootstrap-5', ['locale' => 'pt-BR']) }}
+                {{ $pedidos->links('pagination::bootstrap-5', ['locale' => 'pt-BR']) }}
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FormRequestSavePedido;
 use App\Models\Caminhao;
 use App\Models\Cliente;
 use App\Models\Fornecedor;
@@ -14,35 +15,24 @@ use Illuminate\Support\Facades\DB;
 
 class PedidosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pedidos = Pedidos::get();
-        return view('pedidos.index', compact('pedidos'));
+        $pedidos = Pedidos::paginate(10);
+        return view('pedido.index', compact('pedidos'));
     }
 
     public function create()
     {
         $clientes = Cliente::get();
         $fornecedores = Fornecedor::get();
-        return view('pedidos.create', compact('clientes', 'fornecedores'));
+        $pedido = new Pedidos;
+        return view('pedido.create', compact('pedido', 'clientes', 'fornecedores'));
     }
 
-    public function store(Request $request)
+    public function store(FormRequestSavePedido $request)
     {
-        $arDados = $request->validate([
-            'id_cliente' => 'nullable|exists:clientes,id',
-            'logradouro' => 'required|string|max:255',
-            'numero' => 'required|string|max:10',
-            'complemento' => 'nullable|string|max:100',
-            'bairro' => 'required|string|max:100',
-            'cidade' => 'required|string|max:100',
-            'estado' => 'required|string|max:2',
-            'quantidades' => '',
-            'fornecedores' => '',
-            'produtos' => '',
-            'valores' => ''
-        ]);
-
+        $arDados = $request->validated();
+        dd($arDados);
         try{
             $arItens = array_merge(['quantidades' => $arDados['quantidades']],['fornecedores' => $arDados['fornecedores']], ['produtos' => $arDados['produtos']], ['valores' => $arDados['valores']]);
             DB::transaction(function () use ($arDados, $arItens) {
@@ -140,9 +130,10 @@ class PedidosController extends Controller
     }
 
 
-    public function show($id)
+    public function show($id, $str)
     {
         $pedido = Pedidos::findOrFail($id);
-        return view('pedidos.show', compact('pedido'));
+        $isDelete = $str == 'R';
+        return view('pedido.show', compact('pedido', 'isDelete'));
     }
 }

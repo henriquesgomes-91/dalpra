@@ -90,11 +90,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('show/{id}/{str}', [ProdutoController::class, 'show'])->name('show');
     });
 
+    Route::group(['name' => 'pedido', 'as' => 'pedido.', 'prefix' => 'pedido'], function () {
+        Route::get('/', [PedidosController::class, 'index'])->name('index');
+        Route::get('create', [PedidosController::class, 'create'])->name('create');
+        Route::post('store', [PedidosController::class, 'store'])->name('store');
+        Route::get('show/{id}/{str}', [PedidosController::class, 'remove'])->name('remove');
+        Route::delete('destroy/{id}', [PedidosController::class, 'destroy'])->name('destroy');
+        Route::get('edit/{id}', [PedidosController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [PedidosController::class, 'update'])->name('update');
+        Route::get('show/{id}/{str}', [PedidosController::class, 'show'])->name('show');
+    });
+
     Route::resource('clientes', ClienteController::class);
-    Route::resource('pedidos', PedidosController::class);
+//    Route::resource('pedidos', PedidosController::class);
     Route::resource('entregas', EntregaController::class);
 
-    Route::get('caminhao/remove/{id}', [CaminhaoController::class, 'remove']);
 
     Route::get('fornecedor/{id}/produtos', [ProdutoController::class, 'produtosPorFornecedor']);
     Route::get('produto/{idFornecedor}/{idProduto}/preco', [ProdutoController::class, 'valorPorProduto']);

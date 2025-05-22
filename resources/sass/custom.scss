@@ -193,3 +193,7 @@ table th, table td {
 [class*=sidebar-dark-] {
     background: linear-gradient(to bottom, #000000 0%, #555355 100%);
 }
+
+.modal-field:required {
+    pointer-events: none;
+}

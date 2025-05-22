@@ -15,7 +15,7 @@ class Pedidos extends Model
     protected $with = ['clientes'];
 
     protected $fillable = [
-        'id_cliente', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'estado', 'valor'
+        'id_cliente', 'cep', 'logradouro', 'numero', 'complemento', 'referencia', 'bairro', 'cidade', 'estado', 'valor'
     ];
 
     public function clientes()

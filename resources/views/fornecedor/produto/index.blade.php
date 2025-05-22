@@ -59,6 +59,10 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col text-right">
+            <a href="{{ route('fornecedor.index') }}" class="btn btn-lg btn-secondary mb-3">Voltar</a>
+        </div>
+    </div>
 @endsection
 

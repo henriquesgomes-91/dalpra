@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_cliente')->nullable()->constrained('clientes')->onDelete('set null');
-            $table->string('logradouro');
-            $table->string('numero');
+            $table->string('cep', 8);
+            $table->string('logradouro', 100);
+            $table->integer('numero');
             $table->string('complemento')->nullable();
-            $table->string('bairro');
-            $table->string('cidade');
-            $table->string('estado');
+            $table->string('referencia')->nullable();
+            $table->string('bairro', 100);
+            $table->string('cidade', 100);
+            $table->string('estado', 2);
             $table->foreignId('id_fornecedor')->constrained('fornecedor');
             $table->foreignId('id_produto')->constrained('produtos');
             $table->double('valor', 9, 2);

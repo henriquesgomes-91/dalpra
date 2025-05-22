@@ -49,10 +49,11 @@
             <label for="unidade_medida">Unidade de Medida</label>
             <select {{isset($isDelete) ? 'disabled' : ''}} name="unidade_medida" id="unidade_medida" class="form-control" required>
                 <option>Selecione</option>
-                <option value="UN" {{$produto->unidade_medida == 'UN' ? 'selected' : ''}}>UN</option>
-                <option value="KG" {{$produto->unidade_medida == 'KG' ? 'selected' : ''}}>KG</option>
-                <option value="MT" {{$produto->unidade_medida == 'MT' ? 'selected' : ''}}>MT</option>
-                <option value="MT3" {{$produto->unidade_medida == 'MT3' ? 'selected' : ''}}>MT³</option>
+                <option value="H" {{$produto->unidade_medida == 'H' ? 'selected' : ''}}>Horas</option>
+                <option value="UN" {{$produto->unidade_medida == 'UN' ? 'selected' : ''}}>Unidade - UN</option>
+                <option value="KG" {{$produto->unidade_medida == 'KG' ? 'selected' : ''}}>Kilos - KG</option>
+                <option value="MT" {{$produto->unidade_medida == 'MT' ? 'selected' : ''}}>Metros - M</option>
+                <option value="MT3" {{$produto->unidade_medida == 'MT3' ? 'selected' : ''}}>Metro Cúbico - MT³</option>
             </select>
 
             @error('unidade_medida')

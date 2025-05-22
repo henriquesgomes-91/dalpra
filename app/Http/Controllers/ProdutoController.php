@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Tools;
 use App\Http\Requests\FormRequestSaveProduto;
 use App\Models\Produto;
 use App\Models\ProdutoFornecedor;
@@ -80,7 +81,12 @@ class ProdutoController extends Controller
     public function valorPorProduto($idFornecedor, $idProduto)
     {
         $produto = ProdutoFornecedor::where('id_fornecedor', $idFornecedor)->where('id_produto', $idProduto)->first();
-        return response()->json(['preco_venda' => number_format($produto->preco_venda, 2)]);
+        $arRetorno = [
+            'preco_venda' => number_format($produto->preco_venda, 2),
+            'tipo_produto' => $produto->produto->tipo_produto,
+            'unidade_medida' => Tools::formatarUnidadeMedidaAbreviada($produto->produto->unidade_medida)
+        ];
+        return response()->json($arRetorno);
     }
 
 }

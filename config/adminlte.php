@@ -31,7 +31,7 @@ return [
     */
 
     'use_ico_only' => false,
-    'use_full_favicon' => false,
+    'use_full_favicon' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -339,7 +339,7 @@ return [
         ['header' => 'Pedidos'],
         [
             'text' => 'Pedidos',
-            'url'  => '/pedidos',
+            'url'  => '/pedido',
             'icon' => 'fas fa-shopping-cart',
         ],
         ['header' => 'Entregas'],
